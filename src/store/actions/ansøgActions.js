@@ -123,3 +123,26 @@ export const save = info => {
     }
   };
 };
+
+export const uploadSuccess = file => {
+  return (dispatch, getState, { getFirebase }) => {
+    const firebase = getFirebase();
+    // eslint-disable-next-line
+    const authorId = getState().firebase.auth.uid;
+
+    console.log("file: ", file);
+    console.log("file . avatar: ", file.avatar);
+
+    firebase
+      .storage()
+      .ref("pdf")
+      .child(file.avatar)
+      .getDownloadURL()
+      .then(() => {
+        dispatch({ type: "SEND_FORM_SUCCESS" });
+      })
+      .catch(err => {
+        dispatch({ type: "SEND_FORM_ERROR" }, err);
+      });
+  };
+};

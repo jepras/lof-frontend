@@ -3,10 +3,39 @@ import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { firestoreConnect } from "react-redux-firebase";
 import { compose } from "redux";
-import { send, save } from "../../store/actions/ansøgActions";
+import { send, save, uploadSuccess } from "../../store/actions/ansøgActions";
+
+import firebase from "firebase";
+import FileUploader from "react-firebase-file-uploader";
 
 class Ansøg extends Component {
-  state = {};
+  state = {
+    username: "",
+    avatar: "",
+    isUploading: false,
+    progress: 0,
+    avatarURL: ""
+  };
+
+  /* for upload file */
+  handleChangeUsername = event =>
+    this.setState({ username: event.target.value });
+  handleUploadStart = () => this.setState({ isUploading: true, progress: 0 });
+  handleProgress = progress => this.setState({ progress });
+  handleUploadError = error => {
+    this.setState({ isUploading: false });
+    console.error(error);
+  };
+
+  handleUploadSuccess = filename => {
+    this.setState({ avatar: filename, progress: 100, isUploading: false });
+
+    console.log("handle Upload Success started!");
+    /* filename.preventDefault(); */
+    this.props.uploadSuccess(this.state);
+  };
+
+  /* for form updates */
   handleChange = e => {
     this.setState({
       [e.target.id]: e.target.value
@@ -46,6 +75,32 @@ class Ansøg extends Component {
     // if logged in
     return (
       <div className="container">
+        {/* FILE FORM */}
+        <div>
+          <form>
+            <label>Username:</label>
+            <input
+              type="text"
+              value={this.state.username}
+              name="username"
+              onChange={this.handleChangeUsername}
+            />
+            <label>Avatar:</label>
+            {this.state.isUploading && <p>Progress: {this.state.progress}</p>}
+            {this.state.avatarURL && <img src={this.state.avatarURL} />}
+            <FileUploader
+              accept="pdf/*"
+              name="avatar"
+              randomizeFilename
+              storageRef={firebase.storage().ref("pdf")}
+              onUploadStart={this.handleUploadStart}
+              onUploadError={this.handleUploadError}
+              onUploadSuccess={this.handleUploadSuccess}
+              onProgress={this.handleProgress}
+            />
+          </form>
+        </div>
+
         <form className="white" onSubmit={this.handleSubmit}>
           <h5 className="grey-text text-darken-3">Send formular</h5>
           <p>Du er logget ind med emailen: {auth.email}</p>
@@ -140,7 +195,7 @@ class Ansøg extends Component {
             </div>
             <div className="row">
               <div className="input-field col s6">
-                <i class="material-icons prefix">mail</i>
+                <i className="material-icons prefix">mail</i>
                 <label htmlFor="Email" class={profile.email ? "active" : null}>
                   Email
                 </label>
@@ -152,7 +207,7 @@ class Ansøg extends Component {
                 />
               </div>
               <div className="input-field col s6">
-                <i class="material-icons prefix">phone</i>
+                <i className="material-icons prefix">phone</i>
 
                 <label htmlFor="mobil" class={profile.mobil ? "active" : null}>
                   Mobil
@@ -512,7 +567,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     send: info => dispatch(send(info)),
-    save: info => dispatch(save(info))
+    save: info => dispatch(save(info)),
+    uploadSuccess: file => dispatch(uploadSuccess(file))
   };
 };
 
