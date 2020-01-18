@@ -5,27 +5,25 @@ import { signOut } from "../../store/actions/authActions";
 
 const SignedInLinks = props => {
   return (
-    <div className="black-text">
-      <ul className="right black-text">
-        <li>
-          <NavLink to="/" className="black-text">
-            Om fonden
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/faq">Ofte stillede spørgsmål</NavLink>
-        </li>
-        <li>
-          <NavLink to="/ansøg">Ansøgningsskema</NavLink>
-        </li>
-        <li>
-          <NavLink to="/privatliv">Privatlivspolitik</NavLink>
-        </li>
-        <li>
-          <a onClick={props.signOut}>Log af</a>
-        </li>
-        {props.admin}
-      </ul>
+    <div>
+      <li>
+        <NavLink to="/" className="black-text">
+          Om fonden
+        </NavLink>
+      </li>
+      <li>
+        <NavLink to="/faq">Ofte stillede spørgsmål</NavLink>
+      </li>
+      <li>
+        <NavLink to="/ansøg">Ansøgningsskema</NavLink>
+      </li>
+      <li>
+        <NavLink to="/privatliv">Privatlivspolitik</NavLink>
+      </li>
+      <li>
+        <a onClick={props.signOut}>Log af</a>
+      </li>
+      {props.admin}
     </div>
   );
 };

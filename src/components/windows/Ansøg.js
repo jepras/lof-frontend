@@ -1,15 +1,16 @@
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
-import { connect, useSelector } from "react-redux";
-import { firestoreConnect } from "react-redux-firebase";
-import { compose } from "redux";
-import { send, save, uploadSuccess } from "../../store/actions/ansøgActions";
-
-import firebase from "firebase";
+import { connect } from "react-redux";
+/* import { firestoreConnect } from "react-redux-firebase";
+import { compose } from "redux"; */
+import {
+  send,
+  save,
+  uploadSuccess,
+  deleteFile
+} from "../../store/actions/ansøgActions";
 
 import FileForm from "./FileForm";
-
-const filesPath = "uploadedFiles";
 
 class Ansøg extends Component {
   state = {
@@ -55,18 +56,18 @@ class Ansøg extends Component {
     this.props.save(this.state);
   };
 
+  handledeleteFile = e => {
+    let filNavn = e.currentTarget.parentNode.getAttribute("data-key");
+    this.props.deleteFile(filNavn);
+  };
+
   render() {
     const { auth, profile, authError } = this.props;
-
-    const uploadedFiles = useSelector(
-      ({ firebase: { data } }) => data[auth.uid]
-    );
-    console.log("uploaded files", uploadedFiles);
 
     // if not logged in
     if (!auth.uid)
       return (
-        <div className="dashboard container">
+        <div className="dashboard">
           <p>sd</p>
           <div className="row">
             <p>
@@ -83,13 +84,30 @@ class Ansøg extends Component {
 
     // if logged in
     return (
-      <div className="container">
+      <div>
         <form className="white" onSubmit={this.handleSubmit}>
-          <h5 className="grey-text text-darken-3">Send formular</h5>
-          <p>Du er logget ind med emailen: {auth.email}</p>
+          <div className="row about-row-top">
+            <div className="col col-about s12 m7">
+              <h1>Indsend ansøgningsskema</h1>
+              <div style={{ width: "98%" }}>
+                <hr className="styleheader" />
+              </div>
+            </div>
+            &nbsp;
+            <div className="col col-about s12">
+              <p>Hej {profile.fornavn}!</p>
+              <p>
+                På denne side kan du udfylde din ansøgningen til fonden. Løbende
+                kan du gemme din ansøgningen (nederst på siden) og vende tilbage
+                til ansøgningen en anden dag. Når ansøgningen er fuldendt med
+                personlige informationer, økonomiske forhold og bilag, kan du
+                sende den afsted på knappen "Send".
+              </p>
+            </div>
+          </div>
           <div>
             {" "}
-            <h5 className="grey-text text-darken-3">Personligt</h5>
+            <h5>Personligt</h5>
             <div className="row">
               <div className="input-field col s12">
                 <label htmlFor="cpr" className={profile.cpr ? "active" : null}>
@@ -213,10 +231,10 @@ class Ansøg extends Component {
               <select
                 className="browser-default"
                 id="civilstand"
-                value={profile.civilstand}
+                value={profile.civilstand ? profile.civilstand : "ikke-valgt"}
                 onChange={this.handleChange}
               >
-                <option value="" disabled>
+                <option value="ikke-valgt" disabled>
                   Vælg civilstand
                 </option>
                 <option value="gift">Gift</option>
@@ -259,7 +277,7 @@ class Ansøg extends Component {
             </div>
           </div>
           <div className="row" style={{ paddingTop: "100px" }}>
-            <h5 className="grey-text text-darken-3">Økonomiske forhold</h5>
+            <h5>Økonomiske forhold</h5>
             <h6>Nettooindtægt per måned i kroner</h6>
             <div className="row">
               <div className="input-field col s12">
@@ -508,59 +526,78 @@ class Ansøg extends Component {
                 />
               </div>
             </div>
-          </div>
-          {/* Buttons */}
-          <div className="row">
-            <div className="input-field col s1">
-              <button className="btn lighten-1 z-depth-0 green black-text">
-                Send
-              </button>
+
+            <div className="row">
+              <h5>Vedhæft bilag</h5>
+              <h6>
+                Indsend gerne kopi af årsopgørelse, forskudsopgørelse, andre
+                skattepapirer, eventuel udtalelse fra læge, kommune,
+                sagsbehandler, pensionsmeddelelser, bankkontodetaljer
+              </h6>
+              &nbsp;
+              <hr className="style1" />
+              <div className="row bilag-row-top">
+                &nbsp;
+                <div className="col">
+                  <FileForm />
+                  <FileForm />
+                  <FileForm />
+                  <FileForm />
+                  <FileForm />
+                  <FileForm />
+                </div>
+                <div className="col">
+                  <p>filer uploadet: </p>
+                  <ol>
+                    {profile.uploads &&
+                      profile.uploads.map((fil, index) => (
+                        <li key={index} data-key={fil}>
+                          {fil}{" "}
+                          <button
+                            onClick={this.handledeleteFile}
+                            className="btn lighten-1 z-depth-0 blue black-text"
+                          ></button>
+                        </li>
+                      ))}
+                  </ol>
+                </div>
+              </div>
+            </div>
+            <hr className="style1" />
+
+            {/* check */}
+
+            {profile.savedAt ? (
+              <p>Profilen er sidst gemt d. {profile.savedAt}</p>
+            ) : null}
+
+            {/* Buttons */}
+            <div className="input-field col s2">
+              <a
+                style={{ backgroundColor: "#000000" }}
+                className="btn-large z-depth-1 white-text waves-effect waves-light"
+              >
+                Send <i className="material-icons right">send</i>
+              </a>
               <div className="center red-text">
                 {authError ? <p>{authError}</p> : null}
               </div>
             </div>
 
-            <div className="input-field col s1">
-              <button
+            <div className="input-field col s2">
+              <a
                 onClick={this.handleSave}
-                className="btn lighten-1 z-depth-0 blue black-text"
+                className="btn-large waves-effect waves-dark z-depth-2 black-text"
+                style={{ backgroundColor: "#fafafa" }}
               >
-                Gem
-              </button>
-              <div className="center red-text">
-                {authError ? <p>{authError}</p> : null}
-              </div>
+                Gem <i className="material-icons right">cloud</i>
+              </a>
+            </div>
+            <div className="center red-text">
+              {authError ? <p>{authError}</p> : null}
             </div>
           </div>
         </form>
-
-        <div className="row">
-          <h5 className="grey-text text-darken-3">Vedhæft bilag</h5>
-          <h6>
-            Indsend gerne kopi af årsopgørelse, forskudsopgørelse, andre
-            skattepapirer, eventuel udtalelse fra læge, kommune, sagsbehandler,
-            pensionsmeddelelser, bankkontodetaljer
-          </h6>
-          <div className="col">
-            <FileForm />
-            <FileForm />
-            <FileForm />
-            <FileForm />
-            <FileForm />
-            <FileForm />
-          </div>
-          <div className="col">
-            <p>filer uploadet: {/* {tester ? tester : null} */}</p>
-          </div>
-        </div>
-
-        {/* check */}
-        {profile ? (
-          <p>profilen er opdateret med navnet: {profile.fornavn}</p>
-        ) : (
-          <p>Ikke gemt endnu</p>
-        )}
-        {profile.savedAt ? <p>Og sidst gemt {profile.savedAt}</p> : null}
       </div>
     );
   }
@@ -580,11 +617,14 @@ const mapDispatchToProps = dispatch => {
   return {
     send: info => dispatch(send(info)),
     save: info => dispatch(save(info)),
-    uploadSuccess: file => dispatch(uploadSuccess(file))
+    uploadSuccess: file => dispatch(uploadSuccess(file)),
+    deleteFile: file => dispatch(deleteFile(file))
   };
 };
 
-export default compose(
+/* export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   firestoreConnect([{ collection: "users", orderBy: ["createdAt", "desc"] }])
-)(Ansøg);
+)(Ansøg); */
+
+export default connect(mapStateToProps, mapDispatchToProps)(Ansøg);

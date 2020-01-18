@@ -3,11 +3,11 @@ import React, { Component } from "react";
 class Privatliv extends Component {
   render() {
     return (
-      <div className="container">
-        <div className="row">
+      <div>
+        <div className="row about-row-top">
           <h1>Privatlivspolitik</h1>
-          <div>
-            <p>
+          <div className="col col-about s12 m6">
+            <h6>
               Løfbergs og Fennings Fond
               <br />
               CVR-nr. 25 82 31 17
@@ -17,20 +17,24 @@ class Privatliv extends Component {
               Amaliegade 10
               <br />
               1256 København K<br /> CVR-nr. 25823117
-            </p>
+            </h6>
+            &nbsp;
+            <hr className="styleheader" />
           </div>
-          <hr />
-          <div>
-            <p>
+          <div className="col col-about s12">
+            <h6>
               I det følgende fremgår det, hvilke personoplysninger vi (” Fonden
               ”) som dataansvarlig indsamler, hvad oplysningerne anvendes til,
               hvor længe vi beholder dem, og i hvilket omfang vi deler
               oplysningerne med andre.
-            </p>
-            <br />
+            </h6>
           </div>
+        </div>
+        <hr className="style1" />
+
+        <div className="row about-row">
           <div>
-            <h6>1. Hvad bruger vi dine personoplysninger til?</h6>
+            <h5>1. Hvad bruger vi dine personoplysninger til?</h5>
             <p>
               Vi behandler dine personoplysninger, når du ansøger om et legat,
               for at vurdere, om du opfylder betingelserne for at modtage midler
@@ -40,9 +44,9 @@ class Privatliv extends Component {
             <br />
           </div>
           <div>
-            <h6>
+            <h5>
               2. Hvilke personoplysninger behandler vi og på hvilket grundlag?
-            </h6>
+            </h5>
             <p>
               Hvis du ansøger om et legat fra Fonden, behandler og registrerer
               vi de personoplysninger, som fremgår af din ansøgning og andre
@@ -68,7 +72,7 @@ class Privatliv extends Component {
             <br />
           </div>
           <div>
-            <h6>3. Videregiver vi dine personoplysninger til andre?</h6>
+            <h5>3. Videregiver vi dine personoplysninger til andre?</h5>
             <p>
               Vi vil i visse tilfælde videregive de personoplysninger, som du
               har overgivet til os. Videregivelsen vil alene ske i det omfang og
@@ -88,7 +92,7 @@ class Privatliv extends Component {
             <br />
           </div>
           <div>
-            <h6>4. Hvor lang tid gemmes dine oplysninger?</h6>
+            <h5>4. Hvor lang tid gemmes dine oplysninger?</h5>
             <p>
               Vi gemmer kun dine personoplysninger, så længe det er nødvendigt
               for at opfylde et af de ovenstående formål, eller så lang tid som

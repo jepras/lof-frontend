@@ -3,10 +3,16 @@ import React, { Component } from "react";
 class Faq extends Component {
   render() {
     return (
-      <div className="container">
-        <div className="row">
-          <h1>Oftest stillede spørgsmål</h1>
-          <div style={{ width: "70%" }}>
+      <div>
+        <div className="row about-row-top">
+          <div className="col col-about s12 m6">
+            <h1>Oftest stillede spørgsmål</h1>
+            <div style={{ width: "98%" }}>
+              <hr className="styleheader" />
+            </div>
+          </div>
+          &nbsp;
+          <div className="col s12 col-about">
             <ul
               class="collection"
               style={{ paddingRight: "10px", paddingLeft: "10px" }}

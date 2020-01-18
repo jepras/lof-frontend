@@ -22,19 +22,23 @@ const Navbar = props => {
   );
 
   return (
-    <nav className="nav-wrapper white">
-      <div className="container navwidth">
-        <ul>
-          <li>
-            <Link to="/" className="brand-logo black-text">
-              <h5 className="">Løfberg og Fennings Fond</h5>
-            </Link>
-          </li>
-        </ul>
+    <div>
+      <nav>
+        <div className="nav-wrapper">
+          <Link to="/" className="brand-logo">
+            Løfberg & Fennings Fond
+          </Link>
+          <a href="" data-target="mobile-demo" className="sidenav-trigger">
+            <i className="material-icons">menu</i>
+          </a>
+          <ul className="right hide-on-med-and-down">{links}</ul>
+        </div>
+      </nav>
 
+      <ul className="sidenav" id="mobile-demo">
         {links}
-      </div>
-    </nav>
+      </ul>
+    </div>
   );
 };
 
