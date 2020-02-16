@@ -4,6 +4,8 @@ export const send = info => {
     // eslint-disable-next-line
     const profile = getState().firebase.profile;
     const authorId = getState().firebase.auth.uid;
+
+    dispatch({ type: "SEND_FORM_REQUEST" });
     firestore
       .collection("forms")
       .add({
@@ -41,6 +43,7 @@ export const save = info => {
       today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     var dateTime = date + " " + time;
 
+    /* Get numbers from state if not in form */
     var plusudgifternummer =
       (info.udgift1
         ? parseInt(info.udgift1, 10)
@@ -58,7 +61,6 @@ export const save = info => {
         ? parseInt(stateInfo.profile.udgift3, 10)
         : 0);
     var plusudgifter = plusudgifternummer.toString();
-
     console.log("plusudgifter", plusudgifter);
 
     var plusindtægternummer =
@@ -102,10 +104,7 @@ export const save = info => {
         : stateInfo.profile.familieydelse
         ? parseInt(stateInfo.profile.familieydelse, 10)
         : 0);
-
-    console.log("plusindtægternummer", plusindtægternummer);
     var plusindtægter = plusindtægternummer.toString();
-
     console.log("plusindtægter", plusindtægter);
 
     var totalkrnummer =
@@ -118,6 +117,7 @@ export const save = info => {
     var rest = restnummer.toString();
 
     if (authorId) {
+      dispatch({ type: "SAVE_FORM_REQUEST" });
       firestore
         .collection("users")
         .doc(authorId)
@@ -152,6 +152,7 @@ export const uploadSuccess = file => {
 
     const authorId = getState().firebase.auth.uid;
 
+    dispatch({ type: "UPLOAD_FILE_REQUEST" });
     firebase
       .storage()
       .ref(authorId)
@@ -161,27 +162,15 @@ export const uploadSuccess = file => {
         firestore
           .collection("users")
           .doc(authorId)
-          /* .collection("files") */
           .update({
             uploads: firebase.firestore.FieldValue.arrayUnion(file.avatar)
           });
       })
-
-      /* .then(url =>
-        firestore
-          .collection("users")
-          .doc(authorId)
-          .update({
-            files: {
-              fileavatar: url
-            }
-          })
-      ) */
       .then(() => {
-        dispatch({ type: "SEND_FORM_SUCCESS" });
+        dispatch({ type: "UPLOAD_FILE_SUCCESS" });
       })
       .catch(err => {
-        dispatch({ type: "SEND_FORM_ERROR" }, err);
+        dispatch({ type: "UPLOAD_FILE_ERROR" }, err);
       });
   };
 };
@@ -193,6 +182,7 @@ export const deleteFile = filNavn => {
 
     const authorId = getState().firebase.auth.uid;
 
+    dispatch({ type: "DELETE_FILE_STORAGE_REQUEST" });
     firestore
       .collection("users")
       .doc(authorId)
@@ -203,17 +193,18 @@ export const deleteFile = filNavn => {
     var filRef = firebase
       .storage()
       .ref(authorId)
-      .child(filNavn);
+      /*  .child(filNavn); */
+      .child("forkert");
 
     filRef
       .delete()
-      .then(function() {
+      .then(() => {
         // File deleted successfully
-        console.log("fil slettet fra ny funk!");
+        dispatch({ type: "DELETE_FILE_STORAGE_SUCCESS" });
       })
-      .catch(function(error) {
+      .catch(err => {
         // Uh-oh, an error occurred!
-        console.log("kæmpe fejl");
+        dispatch({ type: "DELETE_FILE_STORAGE_ERROR", err: err });
       });
     console.log("kommer vi hertil?");
   };

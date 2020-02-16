@@ -22,6 +22,11 @@ import M from "materialize-css/dist/js/materialize.min.js"; // Deleted to not ov
       edge: "left",
       inDuration: 250
     });
+
+    var elems = document.querySelectorAll(".fixed-action-btn");
+
+    // eslint-disable-next-line
+    var instances = M.FloatingActionButton.init(elems);
   }
 
   render() {

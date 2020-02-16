@@ -26,9 +26,6 @@ class FileForm extends Component {
 
   handleUploadSuccess = filename => {
     this.setState({ avatar: filename, progress: 100, isUploading: false });
-
-    console.log("handle Upload Success started!");
-
     this.props.uploadSuccess(this.state);
   };
 
@@ -36,27 +33,31 @@ class FileForm extends Component {
     const { uid } = this.props.auth;
 
     return (
-      <div
-        className="row"
-        /* style={{ marginBottom: "-70px", marginTop: "-70px" }} */
-      >
-        <div className="col">
-          <FileUploader
-            accept="pdf/*"
-            name="avatar"
-            storageRef={firebase.storage().ref(uid)}
-            onUploadStart={this.handleUploadStart}
-            onUploadError={this.handleUploadError}
-            onUploadSuccess={this.handleUploadSuccess}
-            onProgress={this.handleProgress}
-          />
+      <div>
+        <div>
+          {!this.state.isUploading ? (
+            <FileUploader
+              accept="pdf/*"
+              name="avatar"
+              storageRef={firebase.storage().ref(uid)}
+              onUploadStart={this.handleUploadStart}
+              onUploadError={this.handleUploadError}
+              onUploadSuccess={this.handleUploadSuccess}
+              onProgress={this.handleProgress}
+            />
+          ) : (
+            <div className="progress">
+              <div
+                className="determinate"
+                style={{ width: this.state.progress }}
+              ></div>
+            </div>
+          )}
         </div>
-        <div
-          className="col"
-          /* style={{ marginBottom: "-20px", marginTop: "-15px" }} */
-        >
-          {this.state.isUploading && <p>Progress: {this.state.progress}</p>}
-        </div>
+        {/* <div className="col">
+          <p>text test</p>
+          {this.state.isUploading && <p> - Progress: {this.state.progress}</p>}
+        </div> */}
       </div>
     );
   }

@@ -11,6 +11,7 @@ import {
 } from "../../store/actions/ansøgActions";
 
 import FileForm from "./FileForm";
+import Loader from "../layout/Loader";
 
 class Ansøg extends Component {
   state = {
@@ -21,35 +22,19 @@ class Ansøg extends Component {
     avatarURL: "" */
   };
 
-  /* for upload file */
-  /* handleChangeUsername = event =>
-    this.setState({ username: event.target.value });
-  handleUploadStart = () => this.setState({ isUploading: true, progress: 0 });
-  handleProgress = progress => this.setState({ progress });
-  handleUploadError = error => {
-    this.setState({ isUploading: false });
-    console.error(error);
-  };
-
-  handleUploadSuccess = filename => {
-    this.setState({ avatar: filename, progress: 100, isUploading: false });
-
-    console.log("handle Upload Success started!");
-    /* filename.preventDefault();
-    this.props.uploadSuccess(this.state);
-  }; */
-
   /* for form updates */
   handleChange = e => {
     this.setState({
       [e.target.id]: e.target.value
     });
   };
+
   handleSend = e => {
     e.preventDefault();
     this.props.send(this.state);
     this.props.history.push("/");
   };
+
   handleSave = e => {
     console.log("handle save started!");
     e.preventDefault();
@@ -62,13 +47,12 @@ class Ansøg extends Component {
   };
 
   render() {
-    const { auth, profile, authError } = this.props;
+    const { auth, profile, authError, ansøg } = this.props;
 
     // if not logged in
     if (!auth.uid)
       return (
         <div className="dashboard">
-          <p>sd</p>
           <div className="row">
             <p>
               For at sende en ansøgning, så skal de oprette en bruger{" "}
@@ -98,10 +82,10 @@ class Ansøg extends Component {
               <p>Hej {profile.fornavn}!</p>
               <p>
                 På denne side kan du udfylde din ansøgningen til fonden. Løbende
-                kan du gemme din ansøgningen (nederst på siden) og vende tilbage
-                til ansøgningen en anden dag. Når ansøgningen er fuldendt med
-                personlige informationer, økonomiske forhold og bilag, kan du
-                sende den afsted på knappen "Send".
+                kan du gemme din ansøgningen (nederst til højre på siden) og
+                vende tilbage til ansøgningen en anden dag. Når ansøgningen er
+                fuldendt med personlige informationer, økonomiske forhold og
+                bilag, kan du sende den afsted på knappen "Send".
               </p>
             </div>
           </div>
@@ -118,6 +102,9 @@ class Ansøg extends Component {
                   id="cpr"
                   onChange={this.handleChange}
                   placeholder={profile.cpr}
+                  className="validate"
+                  maxLength="100"
+                  required
                 />
               </div>
             </div>
@@ -204,11 +191,16 @@ class Ansøg extends Component {
                   Email
                 </label>
                 <input
-                  type="text"
+                  type="email"
                   id="Email"
                   onChange={this.handleChange}
                   placeholder={profile.email}
-                />
+                  className="validate"
+                />{" "}
+                <span
+                  className="helper-text"
+                  data-error="Ikke en korrekt email"
+                ></span>
               </div>
               <div className="input-field col s6">
                 <i className="material-icons prefix">phone</i>
@@ -534,36 +526,51 @@ class Ansøg extends Component {
                 skattepapirer, eventuel udtalelse fra læge, kommune,
                 sagsbehandler, pensionsmeddelelser, bankkontodetaljer
               </h6>
-              &nbsp;
-              <hr className="style1" />
+
               <div className="row bilag-row-top">
-                &nbsp;
-                <div className="col">
-                  <FileForm />
-                  <FileForm />
-                  <FileForm />
-                  <FileForm />
-                  <FileForm />
-                  <FileForm />
-                </div>
-                <div className="col">
-                  <p>filer uploadet: </p>
-                  <ol>
-                    {profile.uploads &&
-                      profile.uploads.map((fil, index) => (
-                        <li key={index} data-key={fil}>
-                          {fil}{" "}
-                          <button
-                            onClick={this.handledeleteFile}
-                            className="btn lighten-1 z-depth-0 blue black-text"
-                          ></button>
+                <ul
+                  className="collection"
+                  style={{ paddingRight: "10px", paddingLeft: "10px" }}
+                >
+                  <li className="collection-item">
+                    <FileForm />
+                    {ansøg.uploadError && ansøg.uploadErrorMsg}
+                  </li>
+                  {/* {profile.uploads &&
+                    profile.uploads.map((fil, index) => (
+                      <div>
+                        <li className="collection-item">
+                          <FileForm />
                         </li>
-                      ))}
-                  </ol>
-                </div>
+                      </div>
+                    ))} */}
+                </ul>
+                <ul className="collection">
+                  <li className="collection-item">
+                    <h6>Gemte Filer</h6>
+                    {ansøg.deleteError && ansøg.deleteErrorMsg}
+                  </li>
+
+                  {profile.uploads &&
+                    profile.uploads.map((fil, index) => (
+                      <div key={index}>
+                        <li
+                          key={index}
+                          data-key={fil}
+                          className="collection-item"
+                        >
+                          {fil}
+                          <a onClick={this.handledeleteFile}>
+                            <span className="secondary-content">
+                              <i className="material-icons">delete</i>
+                            </span>
+                          </a>
+                        </li>
+                      </div>
+                    ))}
+                </ul>
               </div>
             </div>
-            <hr className="style1" />
 
             {/* check */}
 
@@ -572,6 +579,20 @@ class Ansøg extends Component {
             ) : null}
 
             {/* Buttons */}
+            <div className="fixed-action-btn">
+              {ansøg.saveLoading === false ? (
+                <a
+                  className="btn-floating btn-large white-text"
+                  style={{ backgroundColor: "#000000" }}
+                  onClick={this.handleSave}
+                >
+                  GEM
+                </a>
+              ) : (
+                <Loader />
+              )}
+            </div>
+
             <div className="input-field col s2">
               <a
                 style={{ backgroundColor: "#000000" }}
@@ -584,7 +605,7 @@ class Ansøg extends Component {
               </div>
             </div>
 
-            <div className="input-field col s2">
+            {/* <div className="input-field col s2">
               <a
                 onClick={this.handleSave}
                 className="btn-large waves-effect waves-dark z-depth-2 black-text"
@@ -592,7 +613,7 @@ class Ansøg extends Component {
               >
                 Gem <i className="material-icons right">cloud</i>
               </a>
-            </div>
+            </div> */}
             <div className="center red-text">
               {authError ? <p>{authError}</p> : null}
             </div>
@@ -609,7 +630,8 @@ const mapStateToProps = state => {
     // projects: state.firestore.ordered.projects, // from database
     auth: state.firebase.auth, // from auth
     profile: state.firebase.profile, // from authenticated profile
-    authError: state.auth.authError
+    authError: state.auth.authError,
+    ansøg: state.ansøg
   };
 };
 
