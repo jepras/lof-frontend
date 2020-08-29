@@ -17,7 +17,7 @@
     "redux": "^4.0.0",
     "redux-firestore": "^0.5.7",
     "redux-thunk": "^2.3.0",
-    "node-pre-gyp": "0.12.0"
+    "node-pre-gyp": "0.14.0"
   },
   "scripts": {
     "start": "react-scripts start",
