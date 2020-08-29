@@ -5,11 +5,13 @@ export const send = info => {
     const profile = getState().firebase.profile;
     const authorId = getState().firebase.auth.uid;
 
+    console.log("send form initiated with: ", profile);
+
     dispatch({ type: "SEND_FORM_REQUEST" });
     firestore
       .collection("forms")
       .add({
-        ...info,
+        ...profile,
         authorId: authorId,
         createdAt: new Date()
       })
@@ -193,8 +195,7 @@ export const deleteFile = filNavn => {
     var filRef = firebase
       .storage()
       .ref(authorId)
-      /*  .child(filNavn); */
-      .child("forkert");
+      .child(filNavn);
 
     filRef
       .delete()

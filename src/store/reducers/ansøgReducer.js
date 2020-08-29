@@ -8,6 +8,7 @@ const initState = {
 const ansøgReducer = (state = initState, action) => {
   switch (action.type) {
     case "SEND_FORM_REQUEST":
+      console.log("send form fra reducer med: ", state);
       return { ...state, sendLoading: true };
     case "SEND_FORM_SUCCESS":
       return { ...state, sendLoading: false };

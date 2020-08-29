@@ -1,32 +1,47 @@
-import React, { Component } from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
-import Navbar from "./components/layout/Navbar";
-import Footer from "./components/layout/Footer";
+import React, { Component } from 'react';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import Navbar from './components/layout/Navbar';
+import Footer from './components/layout/Footer';
 
-import About from "./components/windows/About";
-import Ansøg from "./components/windows/Ansøg";
-import Privatliv from "./components/windows/Privatliv";
-import Faq from "./components/windows/Faq";
+import About from './components/windows/About';
+import Ansøg from './components/windows/Ansøg';
+import Privatliv from './components/windows/Privatliv';
+import Faq from './components/windows/Faq';
 
-import Oversigt from "./components/admin/Oversigt";
+import Oversigt from './components/admin/Oversigt';
 
-import SignIn from "./components/auth/SignIn";
-import SignUp from "./components/auth/SignUp";
+import SignIn from './components/auth/SignIn';
+import SignUp from './components/auth/SignUp';
 
-import M from "materialize-css/dist/js/materialize.min.js"; // Deleted to not overwrite css, but might be necessary for Sidenav
-/* import "materialize-css/dist/css/materialize.min.css"; */ class App extends Component {
+import M from 'materialize-css/dist/js/materialize.min.js'; // Deleted to not overwrite css, but might be necessary for Sidenav
+/* import "materialize-css/dist/css/materialize.min.css"; */
+
+class App extends Component {
   componentDidMount() {
-    var elem = document.querySelector(".sidenav");
+    // Initiate all, but without options
+    M.AutoInit();
+
+    // Sidenav
+    var elem = document.querySelector('.sidenav');
     // eslint-disable-next-line
     var instance = M.Sidenav.init(elem, {
-      edge: "left",
-      inDuration: 250
+      edge: 'left',
+      inDuration: 250,
     });
 
-    var elems = document.querySelectorAll(".fixed-action-btn");
+    // Modal
+    var modalElems = document.querySelectorAll('.modal');
+    // eslint-disable-next-line
+    var modalInstances = M.Modal.init(modalElems);
 
+    // Floating action button
+    var elems = document.querySelectorAll('.fixed-action-btn');
     // eslint-disable-next-line
     var instances = M.FloatingActionButton.init(elems);
+
+    // tabs
+    /* var tabElem = document.querySelector(".tabs");
+    var tabInstance = M.Tabs.getInstance(tabElem); */
   }
 
   render() {

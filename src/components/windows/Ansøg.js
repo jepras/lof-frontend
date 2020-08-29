@@ -30,14 +30,12 @@ class Ansøg extends Component {
   };
 
   handleSend = e => {
-    e.preventDefault();
     this.props.send(this.state);
-    this.props.history.push("/");
+    console.log("this.state fra send: ", this.state);
   };
 
   handleSave = e => {
-    console.log("handle save started!");
-    e.preventDefault();
+    console.log("this.state fra save: ", this.state);
     this.props.save(this.state);
   };
 
@@ -69,7 +67,7 @@ class Ansøg extends Component {
     // if logged in
     return (
       <div>
-        <form className="white" onSubmit={this.handleSubmit}>
+        <form className="white" onSubmit={this.handleSend}>
           <div className="row about-row-top">
             <div className="col col-about s12 m7">
               <h1>Indsend ansøgningsskema</h1>
@@ -596,7 +594,9 @@ class Ansøg extends Component {
             <div className="input-field col s2">
               <a
                 style={{ backgroundColor: "#000000" }}
-                className="btn-large z-depth-1 white-text waves-effect waves-light"
+                className="btn-large z-depth-1 white-text waves-effect waves-light modal-trigger"
+                href="#modal-submit"
+                onClick={this.handleSave}
               >
                 Send <i className="material-icons right">send</i>
               </a>
@@ -605,17 +605,26 @@ class Ansøg extends Component {
               </div>
             </div>
 
-            {/* <div className="input-field col s2">
-              <a
-                onClick={this.handleSave}
-                className="btn-large waves-effect waves-dark z-depth-2 black-text"
-                style={{ backgroundColor: "#fafafa" }}
-              >
-                Gem <i className="material-icons right">cloud</i>
-              </a>
-            </div> */}
             <div className="center red-text">
               {authError ? <p>{authError}</p> : null}
+            </div>
+
+            {/* Modals */}
+
+            <div id="modal-submit" className="modal">
+              <div className="modal-content">
+                <h4>Er du sikker?</h4>
+                <p>Her er informationerne du har videregivet</p>
+              </div>
+              <div className="modal-footer">
+                <a
+                  href="#!"
+                  onClick={this.handleSend}
+                  className="modal-close waves-effect waves-green btn-flat"
+                >
+                  Send
+                </a>
+              </div>
             </div>
           </div>
         </form>
