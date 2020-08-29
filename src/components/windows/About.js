@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 class About extends Component {
   constructor(props) {
@@ -6,12 +6,13 @@ class About extends Component {
 
     this.state = {
       loading: true,
-      fields: []
+      fields: [],
     };
   }
 
   async componentDidMount() {
-    let response = await fetch("http://localhost:1337/omfondens/1");
+    console.log('process env', process.env);
+    let response = await fetch(process.env.REACT_APP_API_URL + 'omfondens/1');
     if (!response.ok) {
       return;
     }
@@ -32,7 +33,7 @@ class About extends Component {
             <div className="col col-about s12 m6">
               <h6>{omfonden}</h6>
               &nbsp;
-              <div style={{ width: "98%" }}>
+              <div style={{ width: '98%' }}>
                 <hr className="styleheader" />
               </div>
             </div>
