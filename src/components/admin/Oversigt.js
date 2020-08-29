@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 import { decide } from '../../store/actions/adminActions';
-import ApplicationTable from './ApplicationTable';
+/* import ApplicationTable from './ApplicationTable'; */
 
 class Oversigt extends Component {
   constructor(props) {
