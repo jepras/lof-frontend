@@ -1,17 +1,17 @@
-import React, { Component } from "react";
-import { NavLink } from "react-router-dom";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
+import { connect } from 'react-redux';
 /* import { firestoreConnect } from "react-redux-firebase";
 import { compose } from "redux"; */
 import {
   send,
   save,
   uploadSuccess,
-  deleteFile
-} from "../../store/actions/ansøgActions";
+  deleteFile,
+} from '../../store/actions/ansøgActions';
 
-import FileForm from "./FileForm";
-import Loader from "../layout/Loader";
+import FileForm from './FileForm';
+import Loader from '../layout/Loader';
 
 class Ansøg extends Component {
   state = {
@@ -23,24 +23,24 @@ class Ansøg extends Component {
   };
 
   /* for form updates */
-  handleChange = e => {
+  handleChange = (e) => {
     this.setState({
-      [e.target.id]: e.target.value
+      [e.target.id]: e.target.value,
     });
   };
 
-  handleSend = e => {
+  handleSend = (e) => {
     this.props.send(this.state);
-    console.log("this.state fra send: ", this.state);
+    console.log('this.state fra send: ', this.state);
   };
 
-  handleSave = e => {
-    console.log("this.state fra save: ", this.state);
+  handleSave = (e) => {
+    console.log('this.state fra save: ', this.state);
     this.props.save(this.state);
   };
 
-  handledeleteFile = e => {
-    let filNavn = e.currentTarget.parentNode.getAttribute("data-key");
+  handledeleteFile = (e) => {
+    let filNavn = e.currentTarget.parentNode.getAttribute('data-key');
     this.props.deleteFile(filNavn);
   };
 
@@ -53,11 +53,11 @@ class Ansøg extends Component {
         <div className="dashboard">
           <div className="row">
             <p>
-              For at sende en ansøgning, så skal de oprette en bruger{" "}
+              For at sende en ansøgning, så skal du oprette en bruger{' '}
               <NavLink to="/opret">her</NavLink>.
             </p>
             <p>
-              Hvis du allerede har en bruger, så login{" "}
+              Hvis du allerede har en bruger, så login{' '}
               <NavLink to="/login">her</NavLink>.
             </p>
           </div>
@@ -71,7 +71,7 @@ class Ansøg extends Component {
           <div className="row about-row-top">
             <div className="col col-about s12 m7">
               <h1>Indsend ansøgningsskema</h1>
-              <div style={{ width: "98%" }}>
+              <div style={{ width: '98%' }}>
                 <hr className="styleheader" />
               </div>
             </div>
@@ -88,11 +88,11 @@ class Ansøg extends Component {
             </div>
           </div>
           <div>
-            {" "}
+            {' '}
             <h5>Personligt</h5>
             <div className="row">
               <div className="input-field col s12">
-                <label htmlFor="cpr" className={profile.cpr ? "active" : null}>
+                <label htmlFor="cpr" className={profile.cpr ? 'active' : null}>
                   CPR Nummer
                 </label>
                 <input
@@ -110,7 +110,7 @@ class Ansøg extends Component {
               <div className="input-field col s6">
                 <label
                   htmlFor="fornavn"
-                  className={profile.fornavn ? "active" : null}
+                  className={profile.fornavn ? 'active' : null}
                 >
                   Fornavn
                 </label>
@@ -124,7 +124,7 @@ class Ansøg extends Component {
               <div className="input-field col s6">
                 <label
                   htmlFor="efternavn"
-                  className={profile.efternavn ? "active" : null}
+                  className={profile.efternavn ? 'active' : null}
                 >
                   Efternavn
                 </label>
@@ -140,7 +140,7 @@ class Ansøg extends Component {
               <div className="input-field col s12">
                 <label
                   htmlFor="adresse"
-                  className={profile.adresse ? "active" : null}
+                  className={profile.adresse ? 'active' : null}
                 >
                   Adresse
                 </label>
@@ -156,7 +156,7 @@ class Ansøg extends Component {
               <div className="input-field col s4">
                 <label
                   htmlFor="postnummer"
-                  className={profile.postnummer ? "active" : null}
+                  className={profile.postnummer ? 'active' : null}
                 >
                   Postnummer
                 </label>
@@ -168,7 +168,7 @@ class Ansøg extends Component {
                 />
               </div>
               <div className="input-field col s8">
-                <label htmlFor="by" className={profile.by ? "active" : null}>
+                <label htmlFor="by" className={profile.by ? 'active' : null}>
                   By
                 </label>
                 <input
@@ -184,7 +184,7 @@ class Ansøg extends Component {
                 <i className="material-icons prefix">mail</i>
                 <label
                   htmlFor="Email"
-                  className={profile.email ? "active" : null}
+                  className={profile.email ? 'active' : null}
                 >
                   Email
                 </label>
@@ -194,7 +194,7 @@ class Ansøg extends Component {
                   onChange={this.handleChange}
                   placeholder={profile.email}
                   className="validate"
-                />{" "}
+                />{' '}
                 <span
                   className="helper-text"
                   data-error="Ikke en korrekt email"
@@ -205,7 +205,7 @@ class Ansøg extends Component {
 
                 <label
                   htmlFor="mobil"
-                  className={profile.mobil ? "active" : null}
+                  className={profile.mobil ? 'active' : null}
                 >
                   Mobil
                 </label>
@@ -221,7 +221,7 @@ class Ansøg extends Component {
               <select
                 className="browser-default"
                 id="civilstand"
-                value={profile.civilstand ? profile.civilstand : "ikke-valgt"}
+                value={profile.civilstand ? profile.civilstand : 'ikke-valgt'}
                 onChange={this.handleChange}
               >
                 <option value="ikke-valgt" disabled>
@@ -236,7 +236,7 @@ class Ansøg extends Component {
               <div className="input-field col s12">
                 <label
                   htmlFor="børn"
-                  className={profile.børn ? "active" : null}
+                  className={profile.børn ? 'active' : null}
                 >
                   Antal børn og alder
                 </label>
@@ -252,7 +252,7 @@ class Ansøg extends Component {
               <div className="input-field col s12">
                 <label
                   htmlFor="formål"
-                  className={profile.formål ? "active" : null}
+                  className={profile.formål ? 'active' : null}
                 >
                   Ansøgt formål
                 </label>
@@ -266,14 +266,14 @@ class Ansøg extends Component {
               </div>
             </div>
           </div>
-          <div className="row" style={{ paddingTop: "100px" }}>
+          <div className="row" style={{ paddingTop: '100px' }}>
             <h5>Økonomiske forhold</h5>
             <h6>Nettooindtægt per måned i kroner</h6>
             <div className="row">
               <div className="input-field col s12">
                 <label
                   htmlFor="formueibank"
-                  className={profile.formueibank ? "active" : null}
+                  className={profile.formueibank ? 'active' : null}
                 >
                   Indestående formue i bank
                 </label>
@@ -289,7 +289,7 @@ class Ansøg extends Component {
               <div className="input-field col s12">
                 <label
                   htmlFor="indtægtansøger"
-                  className={profile.indtægtansøger ? "active" : null}
+                  className={profile.indtægtansøger ? 'active' : null}
                 >
                   Nettoindtægt for ansøger
                 </label>
@@ -305,7 +305,7 @@ class Ansøg extends Component {
               <div className="input-field col s12">
                 <label
                   htmlFor="indtægtsamlever"
-                  className={profile.indtægtsamlever ? "active" : null}
+                  className={profile.indtægtsamlever ? 'active' : null}
                 >
                   Nettoindtægt for eventuel ægtefælle/samlever
                 </label>
@@ -321,7 +321,7 @@ class Ansøg extends Component {
               <div className="input-field col s12">
                 <label
                   htmlFor="boligsikring"
-                  className={profile.boligsikring ? "active" : null}
+                  className={profile.boligsikring ? 'active' : null}
                 >
                   Boligsikring
                 </label>
@@ -337,7 +337,7 @@ class Ansøg extends Component {
               <div className="input-field col s12">
                 <label
                   htmlFor="huslejetilskud"
-                  className={profile.huslejetilskud ? "active" : null}
+                  className={profile.huslejetilskud ? 'active' : null}
                 >
                   Huslejetilskud
                 </label>
@@ -353,7 +353,7 @@ class Ansøg extends Component {
               <div className="input-field col s12">
                 <label
                   htmlFor="børnebidrag"
-                  className={profile.børnebidrag ? "active" : null}
+                  className={profile.børnebidrag ? 'active' : null}
                 >
                   Børnebidrag
                 </label>
@@ -369,7 +369,7 @@ class Ansøg extends Component {
               <div className="input-field col s12">
                 <label
                   htmlFor="børnetilskud"
-                  className={profile.børnetilskud ? "active" : null}
+                  className={profile.børnetilskud ? 'active' : null}
                 >
                   Børnetilskud
                 </label>
@@ -385,7 +385,7 @@ class Ansøg extends Component {
               <div className="input-field col s12">
                 <label
                   htmlFor="familieydelse"
-                  className={profile.familieydelse ? "active" : null}
+                  className={profile.familieydelse ? 'active' : null}
                 >
                   Familieydelse
                 </label>
@@ -401,7 +401,7 @@ class Ansøg extends Component {
               <div className="input-field col s12">
                 <label
                   htmlFor="totalindtægt"
-                  className={profile.totalIndtægt ? "active" : null}
+                  className={profile.totalIndtægt ? 'active' : null}
                 >
                   Total indtægt (udfyldes automatisk når formen gemmes)
                 </label>
@@ -414,14 +414,14 @@ class Ansøg extends Component {
                 />
               </div>
             </div>
-          </div>{" "}
+          </div>{' '}
           <h6>Nettoudgifter per måned i kroner</h6>
           <div className="row">
             <div className="row">
               <div className="input-field col s12">
                 <label
                   htmlFor="udgift1"
-                  className={profile.udgift1 ? "active" : null}
+                  className={profile.udgift1 ? 'active' : null}
                 >
                   Anden udgift (specificeret)
                 </label>
@@ -437,7 +437,7 @@ class Ansøg extends Component {
               <div className="input-field col s12">
                 <label
                   htmlFor="udgift2"
-                  className={profile.udgift2 ? "active" : null}
+                  className={profile.udgift2 ? 'active' : null}
                 >
                   Anden udgift (specificeret)
                 </label>
@@ -453,7 +453,7 @@ class Ansøg extends Component {
               <div className="input-field col s12">
                 <label
                   htmlFor="udgift3"
-                  className={profile.udgift3 ? "active" : null}
+                  className={profile.udgift3 ? 'active' : null}
                 >
                   Anden udgift (specificeret)
                 </label>
@@ -469,7 +469,7 @@ class Ansøg extends Component {
               <div className="input-field col s12">
                 <label
                   htmlFor="totaludgift"
-                  className={profile.totalUdgift ? "active" : null}
+                  className={profile.totalUdgift ? 'active' : null}
                 >
                   Total udgift (udfyldes automatisk når formen gemmes)
                 </label>
@@ -486,7 +486,7 @@ class Ansøg extends Component {
               <div className="input-field col s12">
                 <label
                   htmlFor="resttilunderhold"
-                  className={profile.resttilunderhold ? "active" : null}
+                  className={profile.resttilunderhold ? 'active' : null}
                 >
                   Rest til underhold (udfyldes automatisk når formen gemmes)
                 </label>
@@ -503,7 +503,7 @@ class Ansøg extends Component {
               <div className="input-field col s12">
                 <label
                   htmlFor="total"
-                  className={profile.totalKroner ? "active" : null}
+                  className={profile.totalKroner ? 'active' : null}
                 >
                   Total kr.
                 </label>
@@ -528,7 +528,7 @@ class Ansøg extends Component {
               <div className="row bilag-row-top">
                 <ul
                   className="collection"
-                  style={{ paddingRight: "10px", paddingLeft: "10px" }}
+                  style={{ paddingRight: '10px', paddingLeft: '10px' }}
                 >
                   <li className="collection-item">
                     <FileForm />
@@ -581,7 +581,7 @@ class Ansøg extends Component {
               {ansøg.saveLoading === false ? (
                 <a
                   className="btn-floating btn-large white-text"
-                  style={{ backgroundColor: "#000000" }}
+                  style={{ backgroundColor: '#000000' }}
                   onClick={this.handleSave}
                 >
                   GEM
@@ -593,7 +593,7 @@ class Ansøg extends Component {
 
             <div className="input-field col s2">
               <a
-                style={{ backgroundColor: "#000000" }}
+                style={{ backgroundColor: '#000000' }}
                 className="btn-large z-depth-1 white-text waves-effect waves-light modal-trigger"
                 href="#modal-submit"
                 onClick={this.handleSave}
@@ -633,23 +633,23 @@ class Ansøg extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   console.log(state);
   return {
     // projects: state.firestore.ordered.projects, // from database
     auth: state.firebase.auth, // from auth
     profile: state.firebase.profile, // from authenticated profile
     authError: state.auth.authError,
-    ansøg: state.ansøg
+    ansøg: state.ansøg,
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    send: info => dispatch(send(info)),
-    save: info => dispatch(save(info)),
-    uploadSuccess: file => dispatch(uploadSuccess(file)),
-    deleteFile: file => dispatch(deleteFile(file))
+    send: (info) => dispatch(send(info)),
+    save: (info) => dispatch(save(info)),
+    uploadSuccess: (file) => dispatch(uploadSuccess(file)),
+    deleteFile: (file) => dispatch(deleteFile(file)),
   };
 };
 
