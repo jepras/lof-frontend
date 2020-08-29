@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 class Privatliv extends Component {
   constructor(props) {
@@ -6,12 +6,14 @@ class Privatliv extends Component {
 
     this.state = {
       loading: true,
-      fields: []
+      fields: [],
     };
   }
 
   async componentDidMount() {
-    let response = await fetch("http://localhost:1337/privatlivspolitiks/1");
+    let response = await fetch(
+      process.env.REACT_APP_API_URL + 'privatlivspolitiks/1'
+    );
     if (!response.ok) {
       return;
     }

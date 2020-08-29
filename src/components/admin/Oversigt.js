@@ -76,40 +76,40 @@ class Oversigt extends Component {
           <div className="col s12">
             <ul className="tabs">
               <li className="tab col s3">
-                <a href="#test1">Test 1</a>
+                <a href="#test1">2020</a>
               </li>
               <li className="tab col s3">
                 <a className="active" href="#test2">
-                  Test 2??
+                  2021
                 </a>
               </li>
               <li className="tab col s3 disabled">
-                <a href="#test3">Disabled Tab</a>
+                <a href="#test3">2022</a>
               </li>
               <li className="tab col s3">
-                <a href="#test4">Test 4</a>
+                <a href="#test4">2023</a>
               </li>
             </ul>
           </div>
           <div id="test1" className="col s12">
-            Test 1
+            2020
           </div>
           <div id="test2" className="col s12">
-            Test 2
+            2021
           </div>
           <div id="test3" className="col s12">
-            Test 3
+            2022
           </div>
           <div id="test4" className="col s12">
-            Test 4
+            2023
           </div>
         </div>
 
-        <ApplicationTable
+        {/* <ApplicationTable
           bilagItems={bilagItems}
           data={data}
           formData={formData}
-        />
+        /> */}
 
         <hr />
 

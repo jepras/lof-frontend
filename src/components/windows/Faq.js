@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 class Faq extends Component {
   constructor(props) {
@@ -6,12 +6,12 @@ class Faq extends Component {
 
     this.state = {
       loading: true,
-      fields: []
+      fields: [],
     };
   }
 
   async componentDidMount() {
-    let response = await fetch("http://localhost:1337/sporgsmals/1");
+    let response = await fetch(process.env.REACT_APP_API_URL + 'sporgsmals/1');
     if (!response.ok) {
       return;
     }
@@ -30,7 +30,7 @@ class Faq extends Component {
           <div className="row about-row-top">
             <div className="col col-about s12 m6">
               <h1>Oftest stillede spørgsmål</h1>
-              <div style={{ width: "98%" }}>
+              <div style={{ width: '98%' }}>
                 <hr className="styleheader" />
               </div>
             </div>
@@ -38,7 +38,7 @@ class Faq extends Component {
             <div className="col s12 col-about">
               <ul
                 className="collection"
-                style={{ paddingRight: "10px", paddingLeft: "10px" }}
+                style={{ paddingRight: '10px', paddingLeft: '10px' }}
               >
                 {question.map((field, index) => {
                   return (
@@ -46,7 +46,7 @@ class Faq extends Component {
                       <div>
                         {field.text}
                         <span className="secondary-content">
-                          {field.svar === "ja" ? (
+                          {field.svar === 'ja' ? (
                             <i className="material-icons">check</i>
                           ) : (
                             <i className="material-icons">do_not_disturb</i>
