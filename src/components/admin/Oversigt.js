@@ -80,7 +80,7 @@ class Oversigt extends Component {
               </li>
               <li className="tab col s3">
                 <a className="active" href="#test2">
-                  Test 2?
+                  Test 2??
                 </a>
               </li>
               <li className="tab col s3 disabled">
