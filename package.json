@@ -7,6 +7,7 @@
     "jquery": "^3.4.1",
     "materialize-css": "^1.0.0",
     "moment": "^2.22.2",
+    "node-pre-gyp": "0.14.0",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-firebase-file-uploader": "^2.4.3",
@@ -17,7 +18,7 @@
     "redux": "^4.0.0",
     "redux-firestore": "^0.5.7",
     "redux-thunk": "^2.3.0",
-    "node-pre-gyp": "0.14.0"
+    "request": "^2.88.2"
   },
   "scripts": {
     "start": "react-scripts start",
