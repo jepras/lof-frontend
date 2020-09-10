@@ -20,8 +20,7 @@ const store = createStore(
       useFirestoreForProfile: true,
       attachAuthIsReady: true,
     }),
-    reduxFirestore(fbConfig), // redux bindings for firestore
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() // devtools
+    reduxFirestore(fbConfig) // redux bindings for firestore
   )
 );
 
