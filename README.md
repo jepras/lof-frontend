@@ -1,5 +1,7 @@
 # How to start app
 
-To remember
+npm run start
+
+# To remember
 
 Initiate eventlisteners in App.js
