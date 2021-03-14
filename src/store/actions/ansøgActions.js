@@ -1,49 +1,49 @@
-export const send = info => {
+export const send = (info) => {
   return (dispatch, getState, { getFirestore }) => {
     const firestore = getFirestore();
     // eslint-disable-next-line
     const profile = getState().firebase.profile;
     const authorId = getState().firebase.auth.uid;
 
-    console.log("send form initiated with: ", profile);
+    console.log('send form initiated with: ', profile);
 
-    dispatch({ type: "SEND_FORM_REQUEST" });
+    dispatch({ type: 'SEND_FORM_REQUEST' });
     firestore
-      .collection("forms")
+      .collection('forms')
       .add({
         ...profile,
         authorId: authorId,
-        createdAt: new Date()
+        createdAt: new Date(),
       })
       .then(() => {
-        dispatch({ type: "SEND_FORM_SUCCESS" });
+        dispatch({ type: 'SEND_FORM_SUCCESS' });
       })
-      .catch(err => {
-        dispatch({ type: "SEND_FORM_ERROR" }, err);
+      .catch((err) => {
+        dispatch({ type: 'SEND_FORM_ERROR' }, err);
       });
   };
 };
 
-export const save = info => {
+export const save = (info) => {
   return (dispatch, getState, { getFirestore }) => {
     /* Initiate variables */
     const firestore = getFirestore();
     const authorId = getState().firebase.auth.uid;
     const stateInfo = getState().firebase;
 
-    console.log("info received: ", info);
+    console.log('info received: ', info);
 
     /* Get DateTime */
     var today = new Date();
     var date =
       today.getDate() +
-      "-" +
+      '-' +
       (today.getMonth() + 1) +
-      "-" +
+      '-' +
       today.getFullYear();
     var time =
-      today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    var dateTime = date + " " + time;
+      today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
+    var dateTime = date + ' ' + time;
 
     /* Get numbers from state if not in form */
     var plusudgifternummer =
@@ -63,7 +63,7 @@ export const save = info => {
         ? parseInt(stateInfo.profile.udgift3, 10)
         : 0);
     var plusudgifter = plusudgifternummer.toString();
-    console.log("plusudgifter", plusudgifter);
+    console.log('plusudgifter', plusudgifter);
 
     var plusindtægternummer =
       (info.formueibank
@@ -107,21 +107,21 @@ export const save = info => {
         ? parseInt(stateInfo.profile.familieydelse, 10)
         : 0);
     var plusindtægter = plusindtægternummer.toString();
-    console.log("plusindtægter", plusindtægter);
+    console.log('plusindtægter', plusindtægter);
 
     var totalkrnummer =
       (plusindtægter ? parseInt(plusindtægter, 10) : 0) -
       (plusudgifter ? parseInt(plusudgifter, 10) : 0);
     var totalkr = totalkrnummer.toString();
-    console.log("totalkr", totalkr);
+    console.log('totalkr', totalkr);
 
     var restnummer = parseInt(plusindtægter, 10) - parseInt(plusudgifter, 10);
     var rest = restnummer.toString();
 
     if (authorId) {
-      dispatch({ type: "SAVE_FORM_REQUEST" });
+      dispatch({ type: 'SAVE_FORM_REQUEST' });
       firestore
-        .collection("users")
+        .collection('users')
         .doc(authorId)
         .update({
           ...info,
@@ -133,80 +133,77 @@ export const save = info => {
             ? plusindtægter
             : stateInfo.profile.totalIndtægt,
           totalKroner: totalkr ? totalkr : stateInfo.profile.totalKroner,
-          resttilunderhold: rest ? rest : stateInfo.profile.resttilunderhold
+          resttilunderhold: rest ? rest : stateInfo.profile.resttilunderhold,
         })
         .then(() => {
-          dispatch({ type: "SAVE_FORM_SUCCESS" });
+          dispatch({ type: 'SAVE_FORM_SUCCESS' });
         })
-        .catch(err => {
-          dispatch({ type: "SAVE_FORM_ERROR" }, err);
+        .catch((err) => {
+          dispatch({ type: 'SAVE_FORM_ERROR' }, err);
         });
     } else {
-      console.warn("ERROR");
+      console.warn('ERROR');
     }
   };
 };
 
-export const uploadSuccess = file => {
+export const uploadSuccess = (file) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     const firebase = getFirebase();
     const firestore = getFirestore();
 
     const authorId = getState().firebase.auth.uid;
 
-    dispatch({ type: "UPLOAD_FILE_REQUEST" });
+    dispatch({ type: 'UPLOAD_FILE_REQUEST' });
     firebase
       .storage()
       .ref(authorId)
       .child(file.avatar)
       .getDownloadURL()
-      .then(url => {
+      .then((url) => {
         firestore
-          .collection("users")
+          .collection('users')
           .doc(authorId)
           .update({
-            uploads: firebase.firestore.FieldValue.arrayUnion(file.avatar)
+            uploads: firebase.firestore.FieldValue.arrayUnion(file.avatar),
           });
       })
       .then(() => {
-        dispatch({ type: "UPLOAD_FILE_SUCCESS" });
+        dispatch({ type: 'UPLOAD_FILE_SUCCESS' });
       })
-      .catch(err => {
-        dispatch({ type: "UPLOAD_FILE_ERROR" }, err);
+      .catch((err) => {
+        dispatch({ type: 'UPLOAD_FILE_ERROR' }, err);
       });
   };
 };
 
-export const deleteFile = filNavn => {
+export const deleteFile = (filNavn) => {
   return (dispatch, getState, { getFirebase, getFirestore }) => {
     const firebase = getFirebase();
     const firestore = getFirestore();
 
     const authorId = getState().firebase.auth.uid;
 
-    dispatch({ type: "DELETE_FILE_STORAGE_REQUEST" });
+    dispatch({ type: 'DELETE_FILE_STORAGE_REQUEST' });
     firestore
-      .collection("users")
+      .collection('users')
       .doc(authorId)
       .update({
-        uploads: firebase.firestore.FieldValue.arrayRemove(filNavn)
+        uploads: firebase.firestore.FieldValue.arrayRemove(filNavn),
       });
 
-    var filRef = firebase
-      .storage()
-      .ref(authorId)
-      .child(filNavn);
+    var filRef = firebase.storage().ref(authorId).child(filNavn);
 
     filRef
       .delete()
       .then(() => {
         // File deleted successfully
-        dispatch({ type: "DELETE_FILE_STORAGE_SUCCESS" });
+        dispatch({ type: 'DELETE_FILE_STORAGE_SUCCESS' });
       })
-      .catch(err => {
+      .catch((err) => {
         // Uh-oh, an error occurred!
-        dispatch({ type: "DELETE_FILE_STORAGE_ERROR", err: err });
+        dispatch({ type: 'DELETE_FILE_STORAGE_ERROR', err: err });
       });
-    console.log("kommer vi hertil?");
+    console.log('kommer vi hertil?');
   };
 };

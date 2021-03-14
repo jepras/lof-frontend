@@ -2,22 +2,26 @@ const initState = {
   sendLoading: false,
   saveLoading: false,
   deleteLoading: false,
-  uploadLoading: false
+  uploadLoading: false,
+  downloadUrl: null,
 };
 
-const ansøgReducer = (state = initState, action) => {
+const adminReducer = (state = initState, action) => {
   switch (action.type) {
-    case "SEND_DECISION_REQUEST":
-      console.log("decision fra reducer med: ", state);
+    case 'DOWNLOAD_FILE_STORAGE_SUCCESS':
+      console.log('download file storage success', action.payload);
+      return { ...state, downloadUrl: action.payload };
+    case 'SEND_DECISION_REQUEST':
+      console.log('decision fra reducer med: ', state);
       return { ...state, sendLoading: true };
-    case "SEND_DECISION_SUCCESS":
+    case 'SEND_DECISION_SUCCESS':
       return { ...state, sendLoading: false };
-    case "SEND_DECISION_ERROR":
+    case 'SEND_DECISION_ERROR':
       return {
         ...state,
         sendLoading: false,
         sendError: action.err,
-        sendErrorMsg: "Handlingen kunne ikke gennemføres, prøv igen"
+        sendErrorMsg: 'Handlingen kunne ikke gennemføres, prøv igen',
       };
 
     default:
@@ -25,4 +29,4 @@ const ansøgReducer = (state = initState, action) => {
   }
 };
 
-export default ansøgReducer;
+export default adminReducer;

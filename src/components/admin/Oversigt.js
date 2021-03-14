@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
-import { decide } from '../../store/actions/adminActions';
+import { decide, downloadFile } from '../../store/actions/adminActions';
+import adminReducer from '../../store/reducers/adminReducer';
 /* import ApplicationTable from './ApplicationTable'; */
 
 class Oversigt extends Component {
@@ -36,8 +37,14 @@ class Oversigt extends Component {
     this.props.decide(decisionData);
   };
 
+  handleDownloadFile = (e) => {
+    let filNavn = e.currentTarget.parentNode.getAttribute('data-key');
+    console.log('filNavn', filNavn);
+    this.props.downloadFile(filNavn);
+  };
+
   render() {
-    const { forms } = this.props;
+    const { forms, downloadUrl } = this.props;
     const { formData } = this.state;
     var data;
 
@@ -47,8 +54,17 @@ class Oversigt extends Component {
 
     const bilagItems = this.state.formData
       ? formData.uploads.map((upload, index) => (
-          <li className="collection-item" key={index}>
+          <li className="collection-item" data-key={upload} key={index}>
             Bilag {index + 1}: {upload}
+            {downloadUrl ? (
+              <a className="btn" href={downloadUrl} target={'_blank'}>
+                Download
+              </a>
+            ) : (
+              <a onClick={this.handleDownloadFile} className="btn">
+                Opret download link
+              </a>
+            )}
           </li>
         ))
       : null;
@@ -143,7 +159,7 @@ class Oversigt extends Component {
                         <button
                           href="#modal-expand"
                           value="hello"
-                          className="modal-trigger"
+                          className="modal-trigger waves-effect waves-light btn"
                           onClick={(e) => this.updateState(field[0])}
                         >
                           Mere info
@@ -162,18 +178,19 @@ class Oversigt extends Component {
                         <button
                           href="#modal-confirm"
                           value="confirm"
-                          className="modal-trigger"
+                          className="modal-trigger green waves-effect waves-light btn-small"
                           onClick={(e) => this.openDecisionModal(field[0])}
                         >
                           Bekræft
                         </button>
+                        <hr />
                         <button
                           href="#modal-reject"
                           value="hello"
-                          className="modal-trigger"
+                          className="modal-trigger red waves-effect waves-light btn-small"
                           onClick={(e) => this.openDecisionModal(field[0])}
                         >
-                          Reject
+                          Afslag
                         </button>
                       </td>
                     </tr>
@@ -182,6 +199,7 @@ class Oversigt extends Component {
               })}
           </tbody>
         </table>
+
         <h3>Bekræftede ansøgninger</h3>
         <table className="highlight">
           <thead>
@@ -194,7 +212,6 @@ class Oversigt extends Component {
               <th>Dato</th>
               <th>Noter</th>
               <th>Bedømmelse</th>
-              <th>Beslutning</th>
             </tr>
           </thead>
 
@@ -212,7 +229,7 @@ class Oversigt extends Component {
                         <button
                           href="#modal-expand"
                           value="hello"
-                          className="modal-trigger"
+                          className="modal-trigger waves-effect waves-light btn"
                           onClick={(e) => this.updateState(field[0])}
                         >
                           Mere info
@@ -227,24 +244,6 @@ class Oversigt extends Component {
                       <td>{field[1].savedAt}</td>
                       <td>{field[1].noter}</td>
                       <td>{field[1].bedømmelse}</td>
-                      <td>
-                        <button
-                          href="#modal-confirm"
-                          value="confirm"
-                          className="modal-trigger"
-                          onClick={(e) => this.openDecisionModal(field[0])}
-                        >
-                          Bekræft
-                        </button>
-                        <button
-                          href="#modal-reject"
-                          value="hello"
-                          className="modal-trigger"
-                          onClick={(e) => this.openDecisionModal(field[0])}
-                        >
-                          Reject
-                        </button>
-                      </td>
                     </tr>
                   );
                 }
@@ -263,7 +262,6 @@ class Oversigt extends Component {
               <th>Dato</th>
               <th>Noter</th>
               <th>Bedømmelse</th>
-              <th>Beslutning</th>
             </tr>
           </thead>
 
@@ -281,7 +279,7 @@ class Oversigt extends Component {
                         <button
                           href="#modal-expand"
                           value="hello"
-                          className="modal-trigger"
+                          className="modal-trigger waves-effect waves-light btn"
                           onClick={(e) => this.updateState(field[0])}
                         >
                           Mere info
@@ -296,24 +294,6 @@ class Oversigt extends Component {
                       <td>{field[1].savedAt}</td>
                       <td>{field[1].noter}</td>
                       <td>{field[1].bedømmelse}</td>
-                      <td>
-                        <button
-                          href="#modal-confirm"
-                          value="confirm"
-                          className="modal-trigger"
-                          onClick={(e) => this.openDecisionModal(field[0])}
-                        >
-                          Bekræft
-                        </button>
-                        <button
-                          href="#modal-reject"
-                          value="hello"
-                          className="modal-trigger"
-                          onClick={(e) => this.openDecisionModal(field[0])}
-                        >
-                          Reject
-                        </button>
-                      </td>
                     </tr>
                   );
                 }
@@ -321,8 +301,6 @@ class Oversigt extends Component {
           </tbody>
         </table>
 
-        <hr />
-        <hr />
         <hr />
 
         {/* Modals */}
@@ -471,7 +449,7 @@ class Oversigt extends Component {
               href="#!"
               data-key="confirm"
               onClick={this.makeDecision}
-              className="modal-close waves-effect waves-green btn-flat"
+              className="modal-close waves-effect waves-green btn"
             >
               Ja
             </a>
@@ -487,7 +465,7 @@ class Oversigt extends Component {
               href="#!"
               data-key="reject"
               onClick={this.makeDecision}
-              className="modal-close waves-effect waves-green btn-flat"
+              className="modal-close waves-effect waves-green btn"
             >
               Ja
             </a>
@@ -499,16 +477,19 @@ class Oversigt extends Component {
 }
 
 const mapStateToProps = (state) => {
+  console.log('state from map', state.admin.downloadUrl);
   return {
     auth: state.firebase.auth,
     profile: state.firebase.profile,
     forms: state.firestore.data.forms,
+    downloadUrl: state.admin.downloadUrl,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     decide: (info) => dispatch(decide(info)),
+    downloadFile: (file) => dispatch(downloadFile(file)),
   };
 };
 
