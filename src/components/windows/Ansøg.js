@@ -14,13 +14,7 @@ import FileForm from './FileForm';
 import Loader from '../layout/Loader';
 
 class Ansøg extends Component {
-  state = {
-    /* username: "",
-    avatar: "",
-    isUploading: false,
-    progress: 0,
-    avatarURL: "" */
-  };
+  state = {};
 
   /* for form updates */
   handleChange = (e) => {
@@ -614,7 +608,10 @@ class Ansøg extends Component {
             <div id="modal-submit" className="modal">
               <div className="modal-content">
                 <h4>Er du sikker?</h4>
-                <p>Her er informationerne du har videregivet</p>
+                <p>
+                  Her er informationerne du har videregivet (mangler at blive
+                  vist)
+                </p>
               </div>
               <div className="modal-footer">
                 <a

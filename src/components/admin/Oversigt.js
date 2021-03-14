@@ -52,7 +52,7 @@ class Oversigt extends Component {
       data = Object.entries(forms);
     }
 
-    const bilagItems = this.state.formData
+    const bilagItems = formData
       ? formData.uploads.map((upload, index) => (
           <li className="collection-item" data-key={upload} key={index}>
             Bilag {index + 1}: {upload}
