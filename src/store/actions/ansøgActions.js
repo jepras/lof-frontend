@@ -118,6 +118,7 @@ export const save = (info) => {
     var restnummer = parseInt(plusindtægter, 10) - parseInt(plusudgifter, 10);
     var rest = restnummer.toString();
 
+    /* Dispatch action */
     if (authorId) {
       dispatch({ type: 'SAVE_FORM_REQUEST' });
       firestore
