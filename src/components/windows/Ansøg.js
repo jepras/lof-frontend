@@ -75,27 +75,24 @@ class Ansøg extends Component {
         <div className="dashboard">
           <div className="row">
             <p>
-              For at sende en ansøgning, så skal du oprette en bruger{' '}
-              <NavLink to="/opret">her</NavLink>.
+              For at sende en ansøgning, så skal du oprette en bruger på knappen
+              nedenfor under
             </p>
-            <a
+            <NavLink
+              to="/opret"
               className="btn-large z-depth-1 white-text waves-effect blue"
-              style={{ backgroundColor: '#000000' }}
-              href="/opret"
             >
               Opret bruger
-            </a>
+            </NavLink>
             <p>
-              Hvis du allerede har en bruger, så login{' '}
-              <NavLink to="/login">her</NavLink>.
+              Hvis du allerede har en bruger, så brug knappen til at logge ind
             </p>
-            <a
+            <NavLink
+              to="/login"
               className="btn-large z-depth-1 white-text waves-effect blue"
-              style={{ backgroundColor: '#000000' }}
-              href="/opret"
             >
               Login her
-            </a>
+            </NavLink>
           </div>
         </div>
       );
@@ -609,86 +606,65 @@ class Ansøg extends Component {
             {profile.status === 'sendt' ? (
               <p>Profilen er sendt ind d. {profile.savedAt}</p>
             ) : null}
+          </div>
+        </form>
 
-            {/* Buttons */}
+        {profile.status === 'sendt' ? null : (
+          <div>
+            <div className="fixed-action-btn">
+              {ansøg.saveLoading === false ? (
+                <a
+                  className="btn-floating btn-large white-text blue lighten-3"
+                  style={{ backgroundColor: '#000000' }}
+                  onClick={this.handleSave}
+                >
+                  GEM
+                </a>
+              ) : (
+                <Loader />
+              )}
+            </div>
+          </div>
+        )}
 
-            {profile.status === 'sendt' ? null : (
-              <div>
-                <div className="fixed-action-btn">
-                  {ansøg.saveLoading === false ? (
-                    <a
-                      className="btn-floating btn-large white-text blue lighten-3"
-                      style={{ backgroundColor: '#000000' }}
-                      onClick={this.handleSave}
-                    >
-                      GEM
-                    </a>
-                  ) : (
-                    <Loader />
-                  )}
-                </div>
-              </div>
-            )}
-
-            {profile.status === 'sendt' ? null : (
-              <div>
-                <div className="row">
-                  <div className="input-field col s12">
-                    <a
-                      href="#modal-expand"
-                      className="btn-large z-depth-1 white-text waves-effect modal-trigger blue"
-                      onClick={this.handleSave}
-                    >
-                      Send til behandling{' '}
-                      <i className="material-icons left">send</i>
-                    </a>
-
-                    <div className="center red-text">
-                      {authError ? <p>{authError}</p> : null}
-                    </div>
-                  </div>
-
-                  <div className="col s12">
-                    <a
-                      className="btn-large z-depth-1 white-text waves-effect waves-light blue lighten-3"
-                      onClick={this.handleSave}
-                    >
-                      Gem oplysninger til senere{' '}
-                      <i className="material-icons left">save</i>
-                    </a>
-                  </div>
-                </div>
+        {profile.status === 'sendt' ? null : (
+          <div>
+            <div className="row">
+              <div className="input-field col s12">
+                <a
+                  href="#modal-expand"
+                  className="btn-large z-depth-1 white-text waves-effect modal-trigger blue"
+                  onClick={this.handleSave}
+                >
+                  Send til behandling{' '}
+                  <i className="material-icons left">send</i>
+                </a>
 
                 <div className="center red-text">
                   {authError ? <p>{authError}</p> : null}
                 </div>
               </div>
-            )}
 
-            {/* Pop up modals */}
-
-            <FormDataInfoModal formData={profile} sendData={this.handleSend} />
-
-            {/* <div id="modal-submit" className="modal">
-              <div className="modal-content">
-                <h4>Er du sikker?</h4>
-                <p>
-                  Her er informationerne du har videregivet (mangler at blive
-                  vist)
-                </p>
-              </div>
-              <div className="modal-footer">
+              <div className="col s12">
                 <a
-                  className="btn z-depth-1 white-text waves-effect waves-light modal-close blue"
-                  onClick={this.handleSend}
+                  className="btn-large z-depth-1 white-text waves-effect waves-light blue lighten-3"
+                  onClick={this.handleSave}
                 >
-                  Send til behandling{' '}
-                  <i className="material-icons left">send</i>
+                  Gem oplysninger til senere{' '}
+                  <i className="material-icons left">save</i>
                 </a>
               </div>
-            </div> */}
+            </div>
+
+            <div className="center red-text">
+              {authError ? <p>{authError}</p> : null}
+            </div>
           </div>
-        </form>
+        )}
+
+        {/* Pop up modals */}
+
+        <FormDataInfoModal formData={profile} sendData={this.handleSend} />
       </div>
     );
   }
