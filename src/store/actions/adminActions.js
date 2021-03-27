@@ -32,7 +32,7 @@ export const downloadFile = (filNavn) => {
 
     dispatch({ type: 'DOWNLOAD_FILE_STORAGE_REQUEST' });
 
-    /* create ref */
+    /* create ref  */
     var filRef = firebase.storage().ref(authorId).child(filNavn);
 
     // Get the download URL
@@ -48,6 +48,7 @@ export const downloadFile = (filNavn) => {
         xhr.open('GET', url);
         xhr.send();
 
+        /* url */
         console.log('url', url);
 
         dispatch({ type: 'DOWNLOAD_FILE_STORAGE_SUCCESS', payload: url });
@@ -70,6 +71,9 @@ export const downloadFile = (filNavn) => {
 
           case 'storage/unknown':
             // Unknown error occurred, inspect the server response
+            break;
+
+          default:
             break;
         }
       });

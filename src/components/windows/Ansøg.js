@@ -603,16 +603,16 @@ class Ansøg extends Component {
 
             {/* Check gemt version */}
 
-            {profile.status == 'gemt' ? (
+            {profile.status === 'gemt' ? (
               <p>Profilen er sidst gemt d. {profile.savedAt}</p>
             ) : null}
-            {profile.status == 'sendt' ? (
+            {profile.status === 'sendt' ? (
               <p>Profilen er sendt ind d. {profile.savedAt}</p>
             ) : null}
 
             {/* Buttons */}
 
-            {profile.status == 'sendt' ? null : (
+            {profile.status === 'sendt' ? null : (
               <div>
                 <div className="fixed-action-btn">
                   {ansøg.saveLoading === false ? (
@@ -630,7 +630,7 @@ class Ansøg extends Component {
               </div>
             )}
 
-            {profile.status == 'sendt' ? null : (
+            {profile.status === 'sendt' ? null : (
               <div>
                 <div className="row">
                   <div className="input-field col s12">
