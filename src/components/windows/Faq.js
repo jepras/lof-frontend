@@ -46,11 +46,7 @@ class Faq extends Component {
                       <div>
                         {field.text}
                         <span className="secondary-content">
-                          {field.svar === 'ja' ? (
-                            <i className="material-icons">check</i>
-                          ) : (
-                            <i className="material-icons">do_not_disturb</i>
-                          )}
+                          {field.svar === 'ja' ? <div>Ja</div> : <div>Nej</div>}
                         </span>
                       </div>
                     </li>

@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 import { decide, downloadFile } from '../../store/actions/adminActions';
-import adminReducer from '../../store/reducers/adminReducer';
-/* import ApplicationTable from './ApplicationTable'; */
+import FormDataInfoModal from '../modals/FormDataInfoModal';
+import { Redirect } from 'react-router-dom';
 
 class Oversigt extends Component {
   constructor(props) {
@@ -44,7 +44,7 @@ class Oversigt extends Component {
   };
 
   render() {
-    const { forms, downloadUrl } = this.props;
+    const { forms, downloadUrl, profile } = this.props;
     const { formData } = this.state;
     var data;
 
@@ -69,22 +69,8 @@ class Oversigt extends Component {
         ))
       : null;
 
-    /* For admin usage only
-    
-    if (!profile.role === "admin") return <Redirect to="/" />;
-
-    if (profile.role === "admin")
-      return (
-        <div className="container">
-          <div className="row">Access allowed</div>
-        </div>
-      ); 
-
-    return (
-      <div className="container">
-        <div className="row">ingen adgang</div>
-      </div>
-    ); */
+    /* For admin usage only */
+    if (!profile.role) return <Redirect to="/" />;
 
     return (
       <div>
@@ -121,26 +107,17 @@ class Oversigt extends Component {
           </div>
         </div>
 
-        {/* <ApplicationTable
-          bilagItems={bilagItems}
-          data={data}
-          formData={formData}
-        /> */}
-
         <hr />
 
+        {profile.role === 'admin' ? <h1>HEY</h1> : null}
         <h3>Nye ansøgniner</h3>
         <table className="highlight">
           <thead>
             <tr>
-              <th>Se mere</th>
+              <th>Ansøgning</th>
               <th>Navn</th>
               <th>CPR</th>
-              <th>Formål</th>
-              <th>Rådighedsbeløb</th>
               <th>Dato</th>
-              <th>Noter</th>
-              <th>Bedømmelse</th>
               <th>Beslutning</th>
             </tr>
           </thead>
@@ -159,38 +136,36 @@ class Oversigt extends Component {
                         <button
                           href="#modal-expand"
                           value="hello"
-                          className="modal-trigger waves-effect waves-light btn"
+                          className="modal-trigger waves-effect btn"
                           onClick={(e) => this.updateState(field[0])}
                         >
-                          Mere info
+                          Læs
                         </button>
                       </td>
                       <td>
                         {field[1].fornavn} {field[1].efternavn}
                       </td>
                       <td>{field[1].cpr}</td>
-                      <td>{field[1].formål}</td>
-                      <td>{field[1].resttilunderhold}</td>
+
                       <td>{field[1].savedAt}</td>
-                      <td>{field[1].noter}</td>
-                      <td>{field[1].bedømmelse}</td>
+
                       <td>
                         <button
                           href="#modal-confirm"
                           value="confirm"
-                          className="modal-trigger green waves-effect waves-light btn-small"
+                          className="modal-trigger green waves-effect btn-small"
                           onClick={(e) => this.openDecisionModal(field[0])}
                         >
                           Bekræft
                         </button>
-                        <hr />
+
                         <button
                           href="#modal-reject"
                           value="hello"
-                          className="modal-trigger red waves-effect waves-light btn-small"
+                          className="modal-trigger red waves-effect btn-small"
                           onClick={(e) => this.openDecisionModal(field[0])}
                         >
-                          Afslag
+                          Afslå
                         </button>
                       </td>
                     </tr>
@@ -204,14 +179,10 @@ class Oversigt extends Component {
         <table className="highlight">
           <thead>
             <tr>
-              <th>Se mere</th>
+              <th>Ansøgning</th>
               <th>Navn</th>
               <th>CPR</th>
-              <th>Formål</th>
-              <th>Rådighedsbeløb</th>
               <th>Dato</th>
-              <th>Noter</th>
-              <th>Bedømmelse</th>
             </tr>
           </thead>
 
@@ -229,21 +200,18 @@ class Oversigt extends Component {
                         <button
                           href="#modal-expand"
                           value="hello"
-                          className="modal-trigger waves-effect waves-light btn"
+                          className="modal-trigger waves-effect btn"
                           onClick={(e) => this.updateState(field[0])}
                         >
-                          Mere info
+                          Læs
                         </button>
                       </td>
                       <td>
                         {field[1].fornavn} {field[1].efternavn}
                       </td>
                       <td>{field[1].cpr}</td>
-                      <td>{field[1].formål}</td>
-                      <td>{field[1].resttilunderhold}</td>
+
                       <td>{field[1].savedAt}</td>
-                      <td>{field[1].noter}</td>
-                      <td>{field[1].bedømmelse}</td>
                     </tr>
                   );
                 }
@@ -254,14 +222,10 @@ class Oversigt extends Component {
         <table className="highlight">
           <thead>
             <tr>
-              <th>Se mere</th>
+              <th>Ansøgning</th>
               <th>Navn</th>
               <th>CPR</th>
-              <th>Formål</th>
-              <th>Rådighedsbeløb</th>
               <th>Dato</th>
-              <th>Noter</th>
-              <th>Bedømmelse</th>
             </tr>
           </thead>
 
@@ -279,21 +243,17 @@ class Oversigt extends Component {
                         <button
                           href="#modal-expand"
                           value="hello"
-                          className="modal-trigger waves-effect waves-light btn"
+                          className="modal-trigger waves-effect btn"
                           onClick={(e) => this.updateState(field[0])}
                         >
-                          Mere info
+                          Læs
                         </button>
                       </td>
                       <td>
                         {field[1].fornavn} {field[1].efternavn}
                       </td>
                       <td>{field[1].cpr}</td>
-                      <td>{field[1].formål}</td>
-                      <td>{field[1].resttilunderhold}</td>
                       <td>{field[1].savedAt}</td>
-                      <td>{field[1].noter}</td>
-                      <td>{field[1].bedømmelse}</td>
                     </tr>
                   );
                 }
@@ -305,139 +265,7 @@ class Oversigt extends Component {
 
         {/* Modals */}
 
-        <div id="modal-expand" className="modal modal-fixed-footer">
-          {this.state.formData ? (
-            <div className="modal-content">
-              <p>Alle informationer om {formData.fornavn}</p>
-
-              <ul className="collection">
-                <li className="collection-header">
-                  <h4>Personlig information</h4>
-                </li>
-
-                <li className="collection-item">
-                  <b>CPR: </b>
-                  {formData.cpr}
-                </li>
-                <li className="collection-item">
-                  <b>Navn: </b>
-                  {formData.fornavn} + {formData.efternavn}
-                </li>
-                <li className="collection-item">
-                  <b>Adresse: </b>
-                  {formData.adresse}
-                </li>
-                <li className="collection-item">
-                  <b>Postnummer: </b>
-                  {formData.postnummer}
-                </li>
-                <li className="collection-item">
-                  <b>By: </b>
-                  {formData.by}
-                </li>
-                <li className="collection-item">
-                  <b>Email: </b>
-                  {formData.email}
-                </li>
-                <li className="collection-item">
-                  <b>Mobil: </b>
-                  {formData.mobil}
-                </li>
-                <li className="collection-item">
-                  <b>Civilstand: </b>
-                  {formData.civilstand}
-                </li>
-                <li className="collection-item">
-                  <b>Formål: </b>
-                  {formData.formål}
-                </li>
-
-                <li className="collection-header">
-                  <h4>Indtægter</h4>
-                </li>
-                <li className="collection-item">
-                  <b>Indestående formue: </b>
-                  {formData.formueibank}
-                </li>
-                <li className="collection-item">
-                  <b>Indtægt ansøger: </b>
-                  {formData.indtægtansøger}
-                </li>
-                <li className="collection-item">
-                  <b>Indtægt samlever: </b>
-                  {formData.indtægtsamlever}
-                </li>
-                <li className="collection-item">
-                  <b>Boligsikring: </b>
-                  {formData.boligsikring}
-                </li>
-                <li className="collection-item">
-                  <b>Huslejetilskud: </b>
-                  {formData.huslejetilskud}
-                </li>
-                <li className="collection-item">
-                  <b>Børnebidrag: </b>
-                  {formData.børnebidrag}
-                </li>
-                <li className="collection-item">
-                  <b>Børnetilskud: </b>
-                  {formData.børnetilskud}
-                </li>
-                <li className="collection-item">
-                  <b>Familieydelse: </b>
-                  {formData.familieydelse}
-                </li>
-                <li className="collection-item">
-                  <b>Total indtægt: </b>
-                  {formData.totalIndtægt}
-                </li>
-
-                <li className="collection-header">
-                  <h4>Udgifter</h4>
-                </li>
-                <li className="collection-item">
-                  <b>Udgift 1: </b>
-                  {formData.udgift1}
-                </li>
-                <li className="collection-item">
-                  <b>Udgift 2: </b>
-                  {formData.udgift2}
-                </li>
-                <li className="collection-item">
-                  <b>Udgift 3: </b>
-                  {formData.udgift3}
-                </li>
-                <li className="collection-item">
-                  <b>Total udgift: </b>
-                  {formData.totalUdgift}
-                </li>
-                <li className="collection-item">
-                  <b>Rest til underhold: </b>
-                  {formData.resttilunderhold}
-                </li>
-                <li className="collection-item">
-                  <b>Total kroner: </b>
-                  {formData.totalKroner}
-                </li>
-
-                <li className="collection-header">
-                  <h4>Bilag</h4>
-                </li>
-                {bilagItems}
-              </ul>
-            </div>
-          ) : (
-            <p>Form data kan ikke vises</p>
-          )}
-          <div className="modal-footer">
-            <a
-              href="#!"
-              className="modal-close waves-effect waves-green btn-flat"
-            >
-              Luk
-            </a>
-          </div>
-        </div>
+        <FormDataInfoModal bilagItems={bilagItems} formData={formData} />
 
         <div id="modal-confirm" className="modal">
           <div className="modal-content">
@@ -477,7 +305,7 @@ class Oversigt extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log('state from map', state.admin.downloadUrl);
+  console.log('state from mapStateToProps', state);
   return {
     auth: state.firebase.auth,
     profile: state.firebase.profile,

@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
-/* import { firestoreConnect } from "react-redux-firebase";
-import { compose } from "redux"; */
 import {
   send,
   save,
@@ -12,6 +10,7 @@ import {
 
 import FileForm from './FileForm';
 import Loader from '../layout/Loader';
+import FormDataInfoModal from '../modals/FormDataInfoModal';
 
 class Ansøg extends Component {
   state = {};
@@ -23,6 +22,7 @@ class Ansøg extends Component {
     });
   };
 
+  /* handle functions */
   handleSend = (e) => {
     this.props.send(this.state);
     console.log('this.state fra send: ', this.state);
@@ -38,6 +38,34 @@ class Ansøg extends Component {
     this.props.deleteFile(filNavn);
   };
 
+  profileStatus = (param) => {
+    switch (param) {
+      case 'sendt':
+        return (
+          <div>
+            <p>
+              Din ansøgning er sendt afsted og under behandling. Vi vender
+              snarest tilbage.{' '}
+            </p>
+            <p>Se din ansøgning nedenunder</p>
+          </div>
+        );
+      default:
+        return (
+          <div>
+            <p>Hej!</p>
+            <p>
+              På denne side kan du udfylde din ansøgningen til fonden. Løbende
+              kan du gemme din ansøgningen (nederst til højre på siden) og vende
+              tilbage til ansøgningen en anden dag. Når ansøgningen er fuldendt
+              med personlige informationer, økonomiske forhold og bilag, kan du
+              sende den afsted på knappen "Send".
+            </p>
+          </div>
+        );
+    }
+  };
+
   render() {
     const { auth, profile, authError, ansøg } = this.props;
 
@@ -50,10 +78,24 @@ class Ansøg extends Component {
               For at sende en ansøgning, så skal du oprette en bruger{' '}
               <NavLink to="/opret">her</NavLink>.
             </p>
+            <a
+              className="btn-large z-depth-1 white-text waves-effect blue"
+              style={{ backgroundColor: '#000000' }}
+              href="/opret"
+            >
+              Opret bruger
+            </a>
             <p>
               Hvis du allerede har en bruger, så login{' '}
               <NavLink to="/login">her</NavLink>.
             </p>
+            <a
+              className="btn-large z-depth-1 white-text waves-effect blue"
+              style={{ backgroundColor: '#000000' }}
+              href="/opret"
+            >
+              Login her
+            </a>
           </div>
         </div>
       );
@@ -71,18 +113,12 @@ class Ansøg extends Component {
             </div>
             &nbsp;
             <div className="col col-about s12">
-              <p>Hej {profile.fornavn}!</p>
-              <p>
-                På denne side kan du udfylde din ansøgningen til fonden. Løbende
-                kan du gemme din ansøgningen (nederst til højre på siden) og
-                vende tilbage til ansøgningen en anden dag. Når ansøgningen er
-                fuldendt med personlige informationer, økonomiske forhold og
-                bilag, kan du sende den afsted på knappen "Send".
-              </p>
+              {this.profileStatus(profile.status)}
             </div>
           </div>
           <div>
             {' '}
+            {/* PERSONLIGT */}
             <h5>Personligt</h5>
             <div className="row">
               <div className="input-field col s12">
@@ -260,6 +296,7 @@ class Ansøg extends Component {
               </div>
             </div>
           </div>
+          {/* ØKONOMISKE FORHOLD */}
           <div className="row" style={{ paddingTop: '100px' }}>
             <h5>Økonomiske forhold</h5>
             <h6>Nettooindtægt per måned i kroner</h6>
@@ -510,7 +547,7 @@ class Ansøg extends Component {
                 />
               </div>
             </div>
-
+            {/* BILAG */}
             <div className="row">
               <h5>Vedhæft bilag</h5>
               <h6>
@@ -564,48 +601,75 @@ class Ansøg extends Component {
               </div>
             </div>
 
-            {/* check */}
+            {/* Check gemt version */}
 
-            {profile.savedAt ? (
+            {profile.status == 'gemt' ? (
               <p>Profilen er sidst gemt d. {profile.savedAt}</p>
+            ) : null}
+            {profile.status == 'sendt' ? (
+              <p>Profilen er sendt ind d. {profile.savedAt}</p>
             ) : null}
 
             {/* Buttons */}
-            <div className="fixed-action-btn">
-              {ansøg.saveLoading === false ? (
-                <a
-                  className="btn-floating btn-large white-text"
-                  style={{ backgroundColor: '#000000' }}
-                  onClick={this.handleSave}
-                >
-                  GEM
-                </a>
-              ) : (
-                <Loader />
-              )}
-            </div>
 
-            <div className="input-field col s2">
-              <a
-                style={{ backgroundColor: '#000000' }}
-                className="btn-large z-depth-1 white-text waves-effect waves-light modal-trigger"
-                href="#modal-submit"
-                onClick={this.handleSave}
-              >
-                Send <i className="material-icons right">send</i>
-              </a>
-              <div className="center red-text">
-                {authError ? <p>{authError}</p> : null}
+            {profile.status == 'sendt' ? null : (
+              <div>
+                <div className="fixed-action-btn">
+                  {ansøg.saveLoading === false ? (
+                    <a
+                      className="btn-floating btn-large white-text blue lighten-3"
+                      style={{ backgroundColor: '#000000' }}
+                      onClick={this.handleSave}
+                    >
+                      GEM
+                    </a>
+                  ) : (
+                    <Loader />
+                  )}
+                </div>
               </div>
-            </div>
+            )}
 
-            <div className="center red-text">
-              {authError ? <p>{authError}</p> : null}
-            </div>
+            {profile.status == 'sendt' ? null : (
+              <div>
+                <div className="row">
+                  <div className="input-field col s12">
+                    <a
+                      href="#modal-expand"
+                      className="btn-large z-depth-1 white-text waves-effect modal-trigger blue"
+                      onClick={this.handleSave}
+                    >
+                      Send til behandling{' '}
+                      <i className="material-icons left">send</i>
+                    </a>
 
-            {/* Modals */}
+                    <div className="center red-text">
+                      {authError ? <p>{authError}</p> : null}
+                    </div>
+                  </div>
 
-            <div id="modal-submit" className="modal">
+                  <div className="col s12">
+                    <a
+                      className="btn-large z-depth-1 white-text waves-effect waves-light blue lighten-3"
+                      onClick={this.handleSave}
+                    >
+                      Gem oplysninger til senere{' '}
+                      <i className="material-icons left">save</i>
+                    </a>
+                  </div>
+                </div>
+
+                <div className="center red-text">
+                  {authError ? <p>{authError}</p> : null}
+                </div>
+              </div>
+            )}
+
+            {/* Pop up modals */}
+
+            <FormDataInfoModal formData={profile} sendData={this.handleSend} />
+
+            {/* <div id="modal-submit" className="modal">
               <div className="modal-content">
                 <h4>Er du sikker?</h4>
                 <p>
@@ -615,14 +679,14 @@ class Ansøg extends Component {
               </div>
               <div className="modal-footer">
                 <a
-                  href="#!"
+                  className="btn z-depth-1 white-text waves-effect waves-light modal-close blue"
                   onClick={this.handleSend}
-                  className="modal-close waves-effect waves-green btn-flat"
                 >
-                  Send
+                  Send til behandling{' '}
+                  <i className="material-icons left">send</i>
                 </a>
               </div>
-            </div>
+            </div> */}
           </div>
         </form>
       </div>
@@ -631,7 +695,7 @@ class Ansøg extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log(state);
+  console.log('state from mapStateToProps: ', state);
   return {
     // projects: state.firestore.ordered.projects, // from database
     auth: state.firebase.auth, // from auth

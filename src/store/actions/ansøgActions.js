@@ -5,7 +5,21 @@ export const send = (info) => {
     const profile = getState().firebase.profile;
     const authorId = getState().firebase.auth.uid;
 
-    console.log('send form initiated with: ', profile);
+    dispatch({ type: 'UPDATE_PROFILE_STATUS_REQUEST' });
+    firestore
+      .collection('users')
+      .doc(authorId)
+      .update({
+        status: 'sendt',
+      })
+      .then(() => {
+        dispatch({ type: 'UPDATE_PROFILE_STATUS__SUCCESS' });
+      })
+      .catch((err) => {
+        dispatch({ type: 'UPDATE_PROFILE_STATUS__ERROR' }, err);
+      });
+
+    console.log('FROM ansøgActions - send form initiated WITH: ', profile);
 
     dispatch({ type: 'SEND_FORM_REQUEST' });
     firestore
@@ -127,6 +141,7 @@ export const save = (info) => {
         .update({
           ...info,
           savedAt: dateTime,
+          status: 'gemt',
           totalUdgift: plusudgifter
             ? plusudgifter
             : stateInfo.profile.totalUdgift,
@@ -205,6 +220,5 @@ export const deleteFile = (filNavn) => {
         // Uh-oh, an error occurred!
         dispatch({ type: 'DELETE_FILE_STORAGE_ERROR', err: err });
       });
-    console.log('kommer vi hertil?');
   };
 };

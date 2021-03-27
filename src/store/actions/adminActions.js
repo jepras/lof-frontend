@@ -28,11 +28,11 @@ export const downloadFile = (filNavn) => {
     console.log('filNavn fra Redux', filNavn);
 
     const firebase = getFirebase();
-
     const authorId = getState().firebase.auth.uid;
 
     dispatch({ type: 'DOWNLOAD_FILE_STORAGE_REQUEST' });
 
+    /* create ref */
     var filRef = firebase.storage().ref(authorId).child(filNavn);
 
     // Get the download URL
@@ -73,7 +73,5 @@ export const downloadFile = (filNavn) => {
             break;
         }
       });
-
-    console.log('kommer vi hertil?');
   };
 };
