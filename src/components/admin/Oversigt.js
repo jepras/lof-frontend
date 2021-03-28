@@ -2,11 +2,17 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
-import { decide, downloadFile } from '../../store/actions/adminActions';
-import FormDataInfoModalClass from '../modals/FormDataInfoModalClass';
 import { Redirect } from 'react-router-dom';
+
+import {
+  decide,
+  downloadFile,
+  deleteUserData,
+} from '../../store/actions/adminActions';
+import FormDataInfoModalClass from '../modals/FormDataInfoModalClass';
 import ModalConfirm from '../modals/ModalConfirm';
 import ModalReject from '../modals/ModalReject';
+import ModalDelete from '../modals/ModalDelete';
 
 class Oversigt extends Component {
   constructor(props) {
@@ -27,9 +33,11 @@ class Oversigt extends Component {
     this.setState({ formData });
   };
 
-  openDecisionModal = (e) => {
+  plugFormIdToState = (e) => {
     this.setState({ formId: e });
-    console.log('openDecisionModal e: ', e);
+
+    var formData = this.props.forms[e];
+    this.setState({ formData });
   };
 
   makeDecision = (e) => {
@@ -41,6 +49,15 @@ class Oversigt extends Component {
     this.props.decide(decisionData);
   };
 
+  deleteUserData = (e) => {
+    var userData = {
+      formId: this.state.formId,
+      selectedUser: this.state.formData.authorId,
+    };
+    console.log('deleting user data with: ', userData);
+    this.props.deleteUserData(userData);
+  };
+
   handleDownloadFile = (e) => {
     let filNavn = e.currentTarget.parentNode.getAttribute('data-key');
     console.log('filNavn', filNavn);
@@ -48,7 +65,7 @@ class Oversigt extends Component {
   };
 
   render() {
-    const { forms, downloadUrl, profile } = this.props;
+    const { forms, downloadUrl, profile, deleteSuccess } = this.props;
     const { formData } = this.state;
     var data;
 
@@ -56,22 +73,24 @@ class Oversigt extends Component {
       data = Object.entries(forms);
     }
 
-    const bilagItems = formData
-      ? formData.uploads.map((upload, index) => (
-          <li className="collection-item" data-key={upload} key={index}>
-            Bilag {index + 1}: {upload}
-            {downloadUrl ? (
-              <a className="btn" href={downloadUrl} target={'_blank'}>
-                Download
-              </a>
-            ) : (
-              <a onClick={this.handleDownloadFile} className="btn">
-                Opret download link
-              </a>
-            )}
-          </li>
-        ))
-      : null;
+    if (formData) {
+      var bilagItems = formData.uploads
+        ? formData.uploads.map((upload, index) => (
+            <li className="collection-item" data-key={upload} key={index}>
+              Bilag {index + 1}: {upload}
+              {downloadUrl ? (
+                <a className="btn" href={downloadUrl} target={'_blank'}>
+                  Download
+                </a>
+              ) : (
+                <a onClick={this.handleDownloadFile} className="btn">
+                  Opret download link
+                </a>
+              )}
+            </li>
+          ))
+        : null;
+    }
 
     /* For admin usage only */
     if (!profile.role) return <Redirect to="/" />;
@@ -80,41 +99,6 @@ class Oversigt extends Component {
 
     return (
       <div>
-        <div className="row">
-          <div className="col s12">
-            <ul className="tabs">
-              <li className="tab col s3">
-                <a href="#test1">2020</a>
-              </li>
-              <li className="tab col s3">
-                <a className="active" href="#test2">
-                  2021
-                </a>
-              </li>
-              <li className="tab col s3 disabled">
-                <a href="#test3">2022</a>
-              </li>
-              <li className="tab col s3">
-                <a href="#test4">2023</a>
-              </li>
-            </ul>
-          </div>
-          <div id="test1" className="col s12">
-            2020
-          </div>
-          <div id="test2" className="col s12">
-            2021
-          </div>
-          <div id="test3" className="col s12">
-            2022
-          </div>
-          <div id="test4" className="col s12">
-            2023
-          </div>
-        </div>
-
-        <hr />
-
         <h3>Nye ansøgniner</h3>
         <table className="highlight">
           <thead>
@@ -124,6 +108,7 @@ class Oversigt extends Component {
               <th>CPR</th>
               <th>Dato</th>
               <th>Beslutning</th>
+              <th>Slet</th>
             </tr>
           </thead>
 
@@ -132,9 +117,6 @@ class Oversigt extends Component {
             {data &&
               data.map((field, index) => {
                 if (!field[1].decision) {
-                  {
-                    /* eslint-enable */
-                  }
                   return (
                     <tr key={index}>
                       <td>
@@ -159,7 +141,7 @@ class Oversigt extends Component {
                           data-target="modal-confirm"
                           value="confirm"
                           className="modal-trigger green waves-effect btn-small"
-                          onClick={(e) => this.openDecisionModal(field[0])}
+                          onClick={(e) => this.plugFormIdToState(field[0])}
                         >
                           Bekræft
                         </button>
@@ -168,13 +150,25 @@ class Oversigt extends Component {
                           data-target="modal-reject"
                           value="hello"
                           className="modal-trigger red waves-effect btn-small"
-                          onClick={(e) => this.openDecisionModal(field[0])}
+                          onClick={(e) => this.plugFormIdToState(field[0])}
                         >
                           Afslå
                         </button>
                       </td>
+                      <td>
+                        <button
+                          data-target="modal-delete"
+                          value="hello"
+                          className="modal-trigger red waves-effect btn-small"
+                          onClick={(e) => this.plugFormIdToState(field[0])}
+                        >
+                          Slet
+                        </button>
+                      </td>
                     </tr>
                   );
+                } else {
+                  return null;
                 }
               })}
           </tbody>
@@ -188,6 +182,7 @@ class Oversigt extends Component {
               <th>Navn</th>
               <th>CPR</th>
               <th>Dato</th>
+              <th>Slet</th>
             </tr>
           </thead>
 
@@ -196,9 +191,6 @@ class Oversigt extends Component {
             {data &&
               data.map((field, index) => {
                 if (field[1].decision === 'confirm') {
-                  {
-                    /* eslint-enable */
-                  }
                   return (
                     <tr key={index}>
                       <td>
@@ -217,8 +209,20 @@ class Oversigt extends Component {
                       <td>{field[1].cpr}</td>
 
                       <td>{field[1].savedAt}</td>
+                      <td>
+                        <button
+                          data-target="modal-delete"
+                          value="hello"
+                          className="modal-trigger red waves-effect btn-small"
+                          onClick={(e) => this.plugFormIdToState(field[0])}
+                        >
+                          Slet
+                        </button>
+                      </td>
                     </tr>
                   );
+                } else {
+                  return null;
                 }
               })}
           </tbody>
@@ -232,6 +236,7 @@ class Oversigt extends Component {
               <th>Navn</th>
               <th>CPR</th>
               <th>Dato</th>
+              <th>Slet</th>
             </tr>
           </thead>
 
@@ -240,9 +245,6 @@ class Oversigt extends Component {
             {data &&
               data.map((field, index) => {
                 if (field[1].decision === 'reject') {
-                  {
-                    /* eslint-enable */
-                  }
                   return (
                     <tr key={index}>
                       <td>
@@ -260,8 +262,20 @@ class Oversigt extends Component {
                       </td>
                       <td>{field[1].cpr}</td>
                       <td>{field[1].savedAt}</td>
+                      <td>
+                        <button
+                          data-target="modal-delete"
+                          value="hello"
+                          className="modal-trigger red waves-effect btn-small"
+                          onClick={(e) => this.plugFormIdToState(field[0])}
+                        >
+                          Slet
+                        </button>
+                      </td>
                     </tr>
                   );
+                } else {
+                  return null;
                 }
               })}
           </tbody>
@@ -273,38 +287,10 @@ class Oversigt extends Component {
         <FormDataInfoModalClass bilagItems={bilagItems} formData={formData} />
         <ModalConfirm confirm={this.makeDecision} />
         <ModalReject reject={this.makeDecision} />
-        {/* <div id="modal-confirm" className="modal">
-          <div className="modal-content">
-            <h4>Er du sikker på et bekræfte?</h4>
-            <p>En email bliver automatisk sendt ud til ansøgeren</p>
-          </div>
-          <div className="modal-footer">
-            <a
-              href="#!"
-              data-key="confirm"
-              onClick={this.makeDecision}
-              className="modal-close waves-effect waves-green btn"
-            >
-              Ja
-            </a>
-          </div>
-        </div> */}
-        {/* <div id="modal-reject" className="modal">
-          <div className="modal-content">
-            <h4>Er du sikker på at afvise ansøgeren?</h4>
-            <p>En email bliver automatisk sendt ud til ansøgeren</p>
-          </div>
-          <div className="modal-footer">
-            <a
-              
-              data-key="reject"
-              onClick={this.makeDecision}
-              className="modal-close waves-effect waves-green btn"
-            >
-              Ja
-            </a>
-          </div>
-        </div> */}
+        <ModalDelete
+          deleteUserData={this.deleteUserData}
+          deleteSuccess={deleteSuccess}
+        />
       </div>
     );
   }
@@ -317,6 +303,7 @@ const mapStateToProps = (state) => {
     profile: state.firebase.profile,
     forms: state.firestore.data.forms,
     downloadUrl: state.admin.downloadUrl,
+    deleteSuccess: state.admin.deleteSuccess,
   };
 };
 
@@ -324,6 +311,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     decide: (info) => dispatch(decide(info)),
     downloadFile: (file) => dispatch(downloadFile(file)),
+    deleteUserData: (userData) => dispatch(deleteUserData(userData)),
   };
 };
 

@@ -1,3 +1,47 @@
+export const deleteUserData = (data) => {
+  return (dispatch, { getFirebase, getFirestore }) => {
+    /* Initiate all variables */
+    const firestore = getFirestore();
+    const firebase = getFirebase();
+    const selectedUserFormId = data.formId;
+    const selectedUserUserId = data.selectedUser;
+
+    /* Dispatch redux action */
+    dispatch({ type: 'DELETE_ALL_REQUEST' });
+
+    /* Delete saved form document */
+    firestore
+      .collection('forms')
+      .doc(selectedUserFormId)
+      .delete()
+      .then(() => {
+        dispatch({ type: 'DELETE_ALL_SUCCESS' });
+        console.log('User form deleted');
+      })
+      .catch((error) => {
+        dispatch({ type: 'DELETE_ALL_ERROR' }, error);
+        console.log("User wasn't deleted");
+      });
+
+    /* Delete user document */
+    firestore
+      .collection('users')
+      .doc(selectedUserUserId)
+      .delete()
+      .then(() => {
+        dispatch({ type: 'DELETE_ALL_SUCCESS' });
+        console.log('User deleted');
+      })
+      .catch((error) => {
+        dispatch({ type: 'DELETE_ALL_ERROR' }, error);
+
+        console.log("User wasn't deleted");
+      });
+
+    /* Delete stored uploads */
+  };
+};
+
 export const decide = (info) => {
   return (dispatch, getState, { getFirestore }) => {
     const firestore = getFirestore();

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import NewModal from '../modals/NewModal';
 
 class About extends Component {
   constructor(props) {

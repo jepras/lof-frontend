@@ -2,6 +2,9 @@ const initState = {
   sendLoading: false,
   saveLoading: false,
   deleteLoading: false,
+  deleteError: false,
+  deleteErrorMsg: false,
+  deleteSuccess: false,
   uploadLoading: false,
   downloadUrl: null,
 };
@@ -22,6 +25,28 @@ const adminReducer = (state = initState, action) => {
         sendLoading: false,
         sendError: action.err,
         sendErrorMsg: 'Handlingen kunne ikke gennemføres, prøv igen',
+      };
+    case 'DELETE_USER_REQUEST':
+      console.log('deleting user fra reducer med: ', state);
+      return { ...state, deleteLoading: true, deleteSuccess: false };
+    case 'DELETE_USER_SUCCESS':
+      return { ...state, deleteLoading: false, deleteSuccess: true };
+    case 'DELETE_USER_ERROR':
+      return {
+        ...state,
+        deleteLoading: false,
+        deleteError: action.err,
+        deleteErrorMsg: 'Handlingen kunne ikke gennemføres, prøv igen',
+      };
+
+    case 'DELETE_USER_FORM_REQUEST':
+      console.log('deleting user fra reducer med: ', state);
+      return { ...state };
+    case 'DELETE_USER_FORM_SUCCESS':
+      return { ...state };
+    case 'DELETE_USER_FORM_ERROR':
+      return {
+        ...state,
       };
 
     default:
