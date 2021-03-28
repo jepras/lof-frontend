@@ -3,8 +3,10 @@ import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 import { decide, downloadFile } from '../../store/actions/adminActions';
-import FormDataInfoModal from '../modals/FormDataInfoModal';
+import FormDataInfoModalClass from '../modals/FormDataInfoModalClass';
 import { Redirect } from 'react-router-dom';
+import ModalConfirm from '../modals/ModalConfirm';
+import ModalReject from '../modals/ModalReject';
 
 class Oversigt extends Component {
   constructor(props) {
@@ -27,9 +29,11 @@ class Oversigt extends Component {
 
   openDecisionModal = (e) => {
     this.setState({ formId: e });
+    console.log('openDecisionModal e: ', e);
   };
 
   makeDecision = (e) => {
+    console.log('e fra makeDecision', e);
     var decisionData = {
       formId: this.state.formId,
       decision: e.target.dataset.key,
@@ -72,6 +76,8 @@ class Oversigt extends Component {
     /* For admin usage only */
     if (!profile.role) return <Redirect to="/" />;
 
+    console.log('data', data);
+
     return (
       <div>
         <div className="row">
@@ -109,7 +115,6 @@ class Oversigt extends Component {
 
         <hr />
 
-        {profile.role === 'admin' ? <h1>HEY</h1> : null}
         <h3>Nye ansøgniner</h3>
         <table className="highlight">
           <thead>
@@ -134,7 +139,7 @@ class Oversigt extends Component {
                     <tr key={index}>
                       <td>
                         <button
-                          href="#modal-expand"
+                          data-target="modal-expand"
                           value="hello"
                           className="modal-trigger waves-effect btn"
                           onClick={(e) => this.updateState(field[0])}
@@ -151,7 +156,7 @@ class Oversigt extends Component {
 
                       <td>
                         <button
-                          href="#modal-confirm"
+                          data-target="modal-confirm"
                           value="confirm"
                           className="modal-trigger green waves-effect btn-small"
                           onClick={(e) => this.openDecisionModal(field[0])}
@@ -160,7 +165,7 @@ class Oversigt extends Component {
                         </button>
 
                         <button
-                          href="#modal-reject"
+                          data-target="modal-reject"
                           value="hello"
                           className="modal-trigger red waves-effect btn-small"
                           onClick={(e) => this.openDecisionModal(field[0])}
@@ -218,6 +223,7 @@ class Oversigt extends Component {
               })}
           </tbody>
         </table>
+
         <h3>Ansøgninger med afslag</h3>
         <table className="highlight">
           <thead>
@@ -264,10 +270,10 @@ class Oversigt extends Component {
         <hr />
 
         {/* Modals */}
-
-        <FormDataInfoModal bilagItems={bilagItems} formData={formData} />
-
-        <div id="modal-confirm" className="modal">
+        <FormDataInfoModalClass bilagItems={bilagItems} formData={formData} />
+        <ModalConfirm confirm={this.makeDecision} />
+        <ModalReject reject={this.makeDecision} />
+        {/* <div id="modal-confirm" className="modal">
           <div className="modal-content">
             <h4>Er du sikker på et bekræfte?</h4>
             <p>En email bliver automatisk sendt ud til ansøgeren</p>
@@ -282,15 +288,15 @@ class Oversigt extends Component {
               Ja
             </a>
           </div>
-        </div>
-        <div id="modal-reject" className="modal">
+        </div> */}
+        {/* <div id="modal-reject" className="modal">
           <div className="modal-content">
             <h4>Er du sikker på at afvise ansøgeren?</h4>
             <p>En email bliver automatisk sendt ud til ansøgeren</p>
           </div>
           <div className="modal-footer">
             <a
-              href="#!"
+              
               data-key="reject"
               onClick={this.makeDecision}
               className="modal-close waves-effect waves-green btn"
@@ -298,7 +304,7 @@ class Oversigt extends Component {
               Ja
             </a>
           </div>
-        </div>
+        </div> */}
       </div>
     );
   }

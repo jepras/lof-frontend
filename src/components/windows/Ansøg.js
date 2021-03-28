@@ -10,7 +10,7 @@ import {
 
 import FileForm from './FileForm';
 import Loader from '../layout/Loader';
-import FormDataInfoModal from '../modals/FormDataInfoModal';
+import FormDataInfoModalClass from '../modals/FormDataInfoModalClass';
 
 class Ansøg extends Component {
   state = {};
@@ -664,7 +664,7 @@ class Ansøg extends Component {
 
         {/* Pop up modals */}
 
-        <FormDataInfoModal formData={profile} sendData={this.handleSend} />
+        <FormDataInfoModalClass formData={profile} sendData={this.handleSend} />
       </div>
     );
   }

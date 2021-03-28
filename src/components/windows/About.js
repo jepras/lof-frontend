@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import NewModal from '../modals/NewModal';
 
 class About extends Component {
   constructor(props) {
@@ -38,7 +39,6 @@ class About extends Component {
               </div>
             </div>
           </div>
-
           <div className="row about-row">
             <h2>Hvad fonden støtter</h2>
 
