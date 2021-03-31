@@ -2,7 +2,6 @@ export const deleteUserData = (data) => {
   return (dispatch, { getFirebase, getFirestore }) => {
     /* Initiate all variables */
     const firestore = getFirestore();
-    const firebase = getFirebase();
     const selectedUserFormId = data.formId;
     const selectedUserUserId = data.selectedUser;
 
