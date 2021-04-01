@@ -17,15 +17,19 @@ export const deleteUserData = (data) => {
     /* Delete stored uploads */
     var arrayLength = formUploads.length;
     console.log('arrayLength: ', arrayLength);
+    // eslint-disable-next-line
     for (var i = 0; i < arrayLength; i++) {
       console.log('name: ', formUploads[i]);
       var filNavn = formUploads[i];
       var filRef = firebase.storage().ref(selectedUserUserId).child(filNavn);
+      // eslint-disable-next-line
       filRef
         .delete()
+        // eslint-disable-next-line
         .then(() => {
           console.log('file deleted: ', filRef);
         })
+        // eslint-disable-next-line
         .catch((error) => {
           console.log('error happened to: ', filRef);
         });
