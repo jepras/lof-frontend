@@ -604,7 +604,7 @@ class Ansøg extends Component {
               <p>Profilen er sidst gemt d. {profile.savedAt}</p>
             ) : null}
             {profile.status === 'sendt' ? (
-              <p>Profilen er sendt ind d. {profile.savedAt}</p>
+              <p>Ansøgningen er sendt ind d. {profile.savedAt}</p>
             ) : null}
           </div>
         </form>

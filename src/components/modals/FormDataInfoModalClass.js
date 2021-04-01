@@ -152,7 +152,7 @@ class FormDataInfoModalClass extends Component {
           {sendData ? (
             <div className="modal-footer">
               <div className="row">
-                <div className="col s10">
+                <div className="col">
                   <a
                     className="btn z-depth-1 white-text waves-effect waves-light modal-close blue"
                     onClick={sendData}
@@ -162,10 +162,7 @@ class FormDataInfoModalClass extends Component {
                   </a>
                 </div>
                 <div className="col">
-                  <a
-                    className="btn z-depth-1 white-text waves-effect waves-light modal-close red"
-                    onClick={sendData}
-                  >
+                  <a className="btn z-depth-1 white-text waves-effect waves-light modal-close red">
                     Afbryd
                   </a>
                 </div>
@@ -173,9 +170,7 @@ class FormDataInfoModalClass extends Component {
             </div>
           ) : (
             <div className="modal-footer">
-              <a className="modal-close waves-effect waves-green btn-flat">
-                Luk
-              </a>
+              <a className="modal-close waves-effect waves-green btn">Luk</a>
             </div>
           )}
         </div>

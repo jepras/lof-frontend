@@ -24,13 +24,13 @@ class ModalConfirm extends Component {
           </div>
           <div className="modal-footer">
             <a
-              href="#!"
               data-key="confirm"
               onClick={confirm}
               className="modal-close waves-effect waves-green btn"
             >
               Ja
             </a>
+            <a className="waves-effect waves-red modal-close red btn">Nej</a>
           </div>
         </div>
       </div>

@@ -7,13 +7,18 @@ const initState = {
   deleteSuccess: false,
   uploadLoading: false,
   downloadUrl: null,
+  linkUpload: null,
 };
 
 const adminReducer = (state = initState, action) => {
   switch (action.type) {
     case 'DOWNLOAD_FILE_STORAGE_SUCCESS':
-      console.log('download file storage success', action.payload);
-      return { ...state, downloadUrl: action.payload };
+      console.log('download file storage success', action);
+      return {
+        ...state,
+        downloadUrl: action.payload,
+        linkUpload: action.linkUpload,
+      };
     case 'SEND_DECISION_REQUEST':
       console.log('decision fra reducer med: ', state);
       return { ...state, sendLoading: true };

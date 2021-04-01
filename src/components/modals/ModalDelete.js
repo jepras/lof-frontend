@@ -27,9 +27,12 @@ class ModalDelete extends Component {
               <div className="modal-footer">
                 <a
                   onClick={deleteUserData}
-                  className="waves-effect waves-green btn"
+                  className="waves-effect waves-green btn green modal-close"
                 >
                   Ja
+                </a>
+                <a className="waves-effect waves-red modal-close red btn">
+                  Nej
                 </a>
               </div>
             </div>

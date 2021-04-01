@@ -30,6 +30,7 @@ class ModalReject extends Component {
             >
               Ja
             </a>
+            <a className="waves-effect waves-red modal-close red btn">Nej</a>
           </div>
         </div>
       </div>

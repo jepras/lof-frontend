@@ -53,20 +53,33 @@ class Oversigt extends Component {
     var userData = {
       formId: this.state.formId,
       selectedUser: this.state.formData.authorId,
+      formData: this.state.formData,
     };
     console.log('deleting user data with: ', userData);
     this.props.deleteUserData(userData);
   };
 
   handleDownloadFile = (e) => {
-    let filNavn = e.currentTarget.parentNode.getAttribute('data-key');
-    console.log('filNavn', filNavn);
-    this.props.downloadFile(filNavn);
+    console.log('formData fra funktion: ', this.state.formData);
+    var userData = {
+      filNavn: e.currentTarget.parentNode.getAttribute('data-key'),
+      selectedUser: this.state.formData.authorId,
+      formData: this.state.formData,
+    };
+
+    this.props.downloadFile(userData);
   };
 
   render() {
-    const { forms, downloadUrl, profile, deleteSuccess } = this.props;
+    const {
+      forms,
+      downloadUrl,
+      linkUpload,
+      profile,
+      deleteSuccess,
+    } = this.props;
     const { formData } = this.state;
+    console.log('forms: ', forms);
     var data;
 
     if (forms) {
@@ -77,9 +90,8 @@ class Oversigt extends Component {
       var bilagItems = formData.uploads
         ? formData.uploads.map((upload, index) => (
             <li className="collection-item" data-key={upload} key={index}>
-              Bilag {index + 1}: {upload}
-              {downloadUrl ? (
-                <a className="btn" href={downloadUrl} target={'_blank'}>
+              {upload === linkUpload ? (
+                <a className="btn green" href={downloadUrl} target={'_blank'}>
                   Download
                 </a>
               ) : (
@@ -87,6 +99,7 @@ class Oversigt extends Component {
                   Opret download link
                 </a>
               )}
+              &nbsp; Bilag {index + 1}: {upload}
             </li>
           ))
         : null;
@@ -114,63 +127,68 @@ class Oversigt extends Component {
 
           <tbody>
             {/* eslint-disable */}
-            {data &&
-              data.map((field, index) => {
-                if (!field[1].decision) {
-                  return (
-                    <tr key={index}>
-                      <td>
-                        <button
-                          data-target="modal-expand"
-                          value="hello"
-                          className="modal-trigger waves-effect btn"
-                          onClick={(e) => this.updateState(field[0])}
-                        >
-                          Læs
-                        </button>
-                      </td>
-                      <td>
-                        {field[1].fornavn} {field[1].efternavn}
-                      </td>
-                      <td>{field[1].cpr}</td>
+            {/*  */}
+            {forms &&
+              Object.entries(forms)
+                .filter((x) => x[1])
+                .map((field, index) => {
+                  /* delete forms[field[0]] */
 
-                      <td>{field[1].savedAt}</td>
+                  if (!field[1].decision) {
+                    return (
+                      <tr key={index}>
+                        <td>
+                          <button
+                            data-target="modal-expand"
+                            value="hello"
+                            className="modal-trigger waves-effect btn"
+                            onClick={(e) => this.updateState(field[0])}
+                          >
+                            Læs
+                          </button>
+                        </td>
+                        <td>
+                          {field[1].fornavn} {field[1].efternavn}
+                        </td>
+                        <td>{field[1].cpr}</td>
 
-                      <td>
-                        <button
-                          data-target="modal-confirm"
-                          value="confirm"
-                          className="modal-trigger green waves-effect btn-small"
-                          onClick={(e) => this.plugFormIdToState(field[0])}
-                        >
-                          Bekræft
-                        </button>
+                        <td>{field[1].savedAt}</td>
 
-                        <button
-                          data-target="modal-reject"
-                          value="hello"
-                          className="modal-trigger red waves-effect btn-small"
-                          onClick={(e) => this.plugFormIdToState(field[0])}
-                        >
-                          Afslå
-                        </button>
-                      </td>
-                      <td>
-                        <button
-                          data-target="modal-delete"
-                          value="hello"
-                          className="modal-trigger red waves-effect btn-small"
-                          onClick={(e) => this.plugFormIdToState(field[0])}
-                        >
-                          Slet
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                } else {
-                  return null;
-                }
-              })}
+                        <td>
+                          <button
+                            data-target="modal-confirm"
+                            value="confirm"
+                            className="modal-trigger green waves-effect btn-small"
+                            onClick={(e) => this.plugFormIdToState(field[0])}
+                          >
+                            Bekræft
+                          </button>
+
+                          <button
+                            data-target="modal-reject"
+                            value="hello"
+                            className="modal-trigger red waves-effect btn-small"
+                            onClick={(e) => this.plugFormIdToState(field[0])}
+                          >
+                            Afslå
+                          </button>
+                        </td>
+                        <td>
+                          <button
+                            data-target="modal-delete"
+                            value="hello"
+                            className="modal-trigger red waves-effect btn-small"
+                            onClick={(e) => this.plugFormIdToState(field[0])}
+                          >
+                            Slet
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  } else {
+                    return null;
+                  }
+                })}
           </tbody>
         </table>
 
@@ -188,43 +206,45 @@ class Oversigt extends Component {
 
           <tbody>
             {/* eslint-disable */}
-            {data &&
-              data.map((field, index) => {
-                if (field[1].decision === 'confirm') {
-                  return (
-                    <tr key={index}>
-                      <td>
-                        <button
-                          href="#modal-expand"
-                          value="hello"
-                          className="modal-trigger waves-effect btn"
-                          onClick={(e) => this.updateState(field[0])}
-                        >
-                          Læs
-                        </button>
-                      </td>
-                      <td>
-                        {field[1].fornavn} {field[1].efternavn}
-                      </td>
-                      <td>{field[1].cpr}</td>
+            {forms &&
+              Object.entries(forms)
+                .filter((x) => x[1])
+                .map((field, index) => {
+                  if (field[1].decision === 'confirm') {
+                    return (
+                      <tr key={index}>
+                        <td>
+                          <button
+                            href="#modal-expand"
+                            value="hello"
+                            className="modal-trigger waves-effect btn"
+                            onClick={(e) => this.updateState(field[0])}
+                          >
+                            Læs
+                          </button>
+                        </td>
+                        <td>
+                          {field[1].fornavn} {field[1].efternavn}
+                        </td>
+                        <td>{field[1].cpr}</td>
 
-                      <td>{field[1].savedAt}</td>
-                      <td>
-                        <button
-                          data-target="modal-delete"
-                          value="hello"
-                          className="modal-trigger red waves-effect btn-small"
-                          onClick={(e) => this.plugFormIdToState(field[0])}
-                        >
-                          Slet
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                } else {
-                  return null;
-                }
-              })}
+                        <td>{field[1].savedAt}</td>
+                        <td>
+                          <button
+                            data-target="modal-delete"
+                            value="hello"
+                            className="modal-trigger red waves-effect btn-small"
+                            onClick={(e) => this.plugFormIdToState(field[0])}
+                          >
+                            Slet
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  } else {
+                    return null;
+                  }
+                })}
           </tbody>
         </table>
 
@@ -242,42 +262,44 @@ class Oversigt extends Component {
 
           <tbody>
             {/* eslint-disable */}
-            {data &&
-              data.map((field, index) => {
-                if (field[1].decision === 'reject') {
-                  return (
-                    <tr key={index}>
-                      <td>
-                        <button
-                          href="#modal-expand"
-                          value="hello"
-                          className="modal-trigger waves-effect btn"
-                          onClick={(e) => this.updateState(field[0])}
-                        >
-                          Læs
-                        </button>
-                      </td>
-                      <td>
-                        {field[1].fornavn} {field[1].efternavn}
-                      </td>
-                      <td>{field[1].cpr}</td>
-                      <td>{field[1].savedAt}</td>
-                      <td>
-                        <button
-                          data-target="modal-delete"
-                          value="hello"
-                          className="modal-trigger red waves-effect btn-small"
-                          onClick={(e) => this.plugFormIdToState(field[0])}
-                        >
-                          Slet
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                } else {
-                  return null;
-                }
-              })}
+            {forms &&
+              Object.entries(forms)
+                .filter((x) => x[1])
+                .map((field, index) => {
+                  if (field[1].decision === 'reject') {
+                    return (
+                      <tr key={index}>
+                        <td>
+                          <button
+                            href="#modal-expand"
+                            value="hello"
+                            className="modal-trigger waves-effect btn"
+                            onClick={(e) => this.updateState(field[0])}
+                          >
+                            Læs
+                          </button>
+                        </td>
+                        <td>
+                          {field[1].fornavn} {field[1].efternavn}
+                        </td>
+                        <td>{field[1].cpr}</td>
+                        <td>{field[1].savedAt}</td>
+                        <td>
+                          <button
+                            data-target="modal-delete"
+                            value="hello"
+                            className="modal-trigger red waves-effect btn-small"
+                            onClick={(e) => this.plugFormIdToState(field[0])}
+                          >
+                            Slet
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  } else {
+                    return null;
+                  }
+                })}
           </tbody>
         </table>
 
@@ -303,6 +325,7 @@ const mapStateToProps = (state) => {
     profile: state.firebase.profile,
     forms: state.firestore.data.forms,
     downloadUrl: state.admin.downloadUrl,
+    linkUpload: state.admin.linkUpload,
     deleteSuccess: state.admin.deleteSuccess,
   };
 };

@@ -1,12 +1,35 @@
 export const deleteUserData = (data) => {
-  return (dispatch, { getFirebase, getFirestore }) => {
+  return (dispatch, getState, { getFirestore, getFirebase }) => {
     /* Initiate all variables */
     const firestore = getFirestore();
+    const firebase = getFirebase();
+
     const selectedUserFormId = data.formId;
     const selectedUserUserId = data.selectedUser;
+    const formData = data.formData;
+    const formUploads = formData.uploads;
+
+    console.log('dispatching deleteUserData with: ', data);
 
     /* Dispatch redux action */
     dispatch({ type: 'DELETE_ALL_REQUEST' });
+
+    /* Delete stored uploads */
+    var arrayLength = formUploads.length;
+    console.log('arrayLength: ', arrayLength);
+    for (var i = 0; i < arrayLength; i++) {
+      console.log('name: ', formUploads[i]);
+      var filNavn = formUploads[i];
+      var filRef = firebase.storage().ref(selectedUserUserId).child(filNavn);
+      filRef
+        .delete()
+        .then(() => {
+          console.log('file deleted: ', filRef);
+        })
+        .catch((error) => {
+          console.log('error happened to: ', filRef);
+        });
+    }
 
     /* Delete saved form document */
     firestore
@@ -16,28 +39,26 @@ export const deleteUserData = (data) => {
       .then(() => {
         dispatch({ type: 'DELETE_ALL_SUCCESS' });
         console.log('User form deleted');
+
+        /* Delete user document */
+        firestore
+          .collection('users')
+          .doc(selectedUserUserId)
+          .delete()
+          .then(() => {
+            dispatch({ type: 'DELETE_ALL_SUCCESS' });
+            console.log('User deleted');
+          })
+          .catch((error) => {
+            dispatch({ type: 'DELETE_ALL_ERROR' }, error);
+
+            console.log("User wasn't deleted");
+          });
       })
       .catch((error) => {
         dispatch({ type: 'DELETE_ALL_ERROR' }, error);
         console.log("User wasn't deleted");
       });
-
-    /* Delete user document */
-    firestore
-      .collection('users')
-      .doc(selectedUserUserId)
-      .delete()
-      .then(() => {
-        dispatch({ type: 'DELETE_ALL_SUCCESS' });
-        console.log('User deleted');
-      })
-      .catch((error) => {
-        dispatch({ type: 'DELETE_ALL_ERROR' }, error);
-
-        console.log("User wasn't deleted");
-      });
-
-    /* Delete stored uploads */
   };
 };
 
@@ -66,12 +87,21 @@ export const decide = (info) => {
   };
 };
 
-export const downloadFile = (filNavn) => {
+export const downloadFile = (userData) => {
   return (dispatch, getState, { getFirebase }) => {
-    console.log('filNavn fra Redux', filNavn);
+    console.log('userData fra Redux', userData);
 
     const firebase = getFirebase();
-    const authorId = getState().firebase.auth.uid;
+    const authorId = userData.selectedUser;
+    const filNavn = userData.filNavn;
+    const formData = userData.formData;
+    const formUploads = formData.uploads;
+
+    var arrayLength = formUploads.length;
+    for (var i = 0; i < arrayLength; i++) {
+      console.log('array #', [i]);
+      console.log('name: ', formUploads[i]);
+    }
 
     dispatch({ type: 'DOWNLOAD_FILE_STORAGE_REQUEST' });
 
@@ -94,7 +124,11 @@ export const downloadFile = (filNavn) => {
         /* url */
         console.log('url', url);
 
-        dispatch({ type: 'DOWNLOAD_FILE_STORAGE_SUCCESS', payload: url });
+        dispatch({
+          type: 'DOWNLOAD_FILE_STORAGE_SUCCESS',
+          payload: url,
+          linkUpload: filNavn,
+        });
       })
       .catch(function (error) {
         dispatch({ type: 'DOWNLOAD_FILE_STORAGE_ERROR' });
@@ -102,21 +136,26 @@ export const downloadFile = (filNavn) => {
         switch (error.code) {
           case 'storage/object-not-found':
             // File doesn't exist
+            console.log('object not found');
             break;
 
           case 'storage/unauthorized':
             // User doesn't have permission to access the object
+            console.log('no permission');
             break;
 
           case 'storage/canceled':
             // User canceled the upload
+            console.log('user cancelled');
             break;
 
           case 'storage/unknown':
             // Unknown error occurred, inspect the server response
+            console.log('unknown error');
             break;
 
           default:
+            console.log('default');
             break;
         }
       });
