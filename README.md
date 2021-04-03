@@ -1,24 +1,5 @@
 # Dokumentation for Løfbergs og Fennings Fonden
 
-## Ved overførsel af system
-
-Overfør admin rights af Firebase db, Netlify, ..?
-
-Overfør opsætningen fra Heroku til Any.Cloud's appdeployment service.
-
-- Niels skal tage stilling til om både frontend og backend skal lagres på Heroku/Netlify hvor der så skal betales, eller om den skal serviceres fra Any.Cloud.
-
-Opret admin bruger til Emil & Niels.
-
-## Nødvendige links
-
-- Database - Firebase db: https://console.firebase.google.com/u/0/project/lof-fond/firestore/data~2Fforms~2FgWocfPsdXxfX49sCnZgL
-- CMS - Strapi: https://github.com/jepras/lof-strapi & https://loffond.herokuapp.com/admin/
-- Hosting
-  - Hosting backend - Heroku: https://dashboard.heroku.com/apps
-  - Hosting frontend - Netlify:
-- URL deployed til: https://lof-fond.netlify.app/
-
 ## Forklaring
 
 På **Firebase** lagres alle formularer, brugere og de filer de har uploadet.
@@ -30,6 +11,42 @@ På **Heroku** ligger Strapi app'en deployet.
 På **Netlify** ligger front end app'en deployet.
 
 ![System Tegning](./src/config/readme/lof-system.png 'Sammenhæng')
+
+## Nødvendige links
+
+- Database - Firebase db: https://console.firebase.google.com/u/0/project/lof-fond/firestore/data~2Fforms~2FgWocfPsdXxfX49sCnZgL
+- CMS - Strapi: https://github.com/jepras/lof-strapi & https://loffond.herokuapp.com/admin/
+- Hosting
+  - Hosting backend - Heroku: https://dashboard.heroku.com/apps
+  - Hosting frontend - Netlify:
+- URL deployed til: https://lof-fond.netlify.app/
+
+## Ved overførsel af system
+
+Overfør admin rights af Firebase db
+https://console.firebase.google.com/u/0/project/lof-fond/settings/iam
+
+### Backend: Heroku/Strapi
+
+Fonden skal enten overføre Strapi til egen server fra Heroku eller blive ved med at hoste det på Heroku.
+
+Hvis egen:
+
+- Opsætte en database et sted.
+- Deploy'e STRAPI selv.
+- Ændre .env.production key til at pege på ny URL
+  Alternativt: Fonden skal overtage Heroku projektet, betale årligt for at servicen altid er på. Maintaine og opdatere selv.
+
+- Niels skal tage stilling til om både frontend og backend skal lagres på Heroku/Netlify hvor der så skal betales, eller om den skal serviceres fra Any.Cloud.
+
+### Frontend: Netlify/Github
+
+Repository skal clones og hostes et valgfrit sted.
+https://github.com/jepras/lof-frontend
+
+### Web app
+
+Opret admin bruger til Emil & Niels.
 
 ## Frontend (det der kan ses i web applikationen)
 

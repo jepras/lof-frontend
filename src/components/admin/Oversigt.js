@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 import { Redirect } from 'react-router-dom';
+import { functions } from '../../config/fbConfig.js';
 
 import {
   decide,
@@ -22,6 +23,14 @@ class Oversigt extends Component {
 
     this.updateState = this.updateState.bind(this);
   }
+
+  sendEmail = () => {
+    const callable = functions.httpsCallable('genericEmail');
+    console.log('callable', callable);
+    return callable({ usermail: 'jeprasher@gmail.com', username: 'bob' }).then(
+      console.log('sucecss!')
+    );
+  };
 
   updateState = (e) => {
     this.setState({ currentRow: e });
@@ -112,6 +121,9 @@ class Oversigt extends Component {
 
     return (
       <div>
+        <button onClick={(e) => this.sendEmail()} className="btn">
+          tryk
+        </button>
         <h3>Nye ansøgniner</h3>
         <table className="highlight">
           <thead>
