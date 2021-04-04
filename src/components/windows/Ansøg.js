@@ -67,6 +67,16 @@ class Ansøg extends Component {
   render() {
     const { auth, profile, authError, ansøg } = this.props;
 
+    if (profile) {
+      var bilagItems = profile.uploads
+        ? profile.uploads.map((upload, index) => (
+            <li className="collection-item" data-key={upload} key={index}>
+              Bilag {index + 1}: {upload}
+            </li>
+          ))
+        : null;
+    }
+
     // if not logged in
     if (!auth.uid)
       return (
@@ -602,7 +612,7 @@ class Ansøg extends Component {
               <p>Profilen er sidst gemt d. {profile.savedAt}</p>
             ) : null}
             {profile.status === 'sendt' ? (
-              <p>Ansøgningen er sendt ind d. {profile.savedAt}</p>
+              <h3>Ansøgningen er sendt ind d. {profile.savedAt}</h3>
             ) : null}
           </div>
         </form>
@@ -662,7 +672,11 @@ class Ansøg extends Component {
 
         {/* Pop up modals */}
 
-        <FormDataInfoModalClass formData={profile} sendData={this.handleSend} />
+        <FormDataInfoModalClass
+          formData={profile}
+          bilagItems={bilagItems}
+          sendData={this.handleSend}
+        />
       </div>
     );
   }
