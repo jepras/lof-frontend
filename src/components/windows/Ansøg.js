@@ -25,11 +25,9 @@ class Ansøg extends Component {
   /* handle functions */
   handleSend = (e) => {
     this.props.send(this.state);
-    console.log('this.state fra send: ', this.state);
   };
 
   handleSave = (e) => {
-    console.log('this.state fra save: ', this.state);
     this.props.save(this.state);
   };
 
@@ -671,7 +669,6 @@ class Ansøg extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log('state from mapStateToProps: ', state);
   return {
     // projects: state.firestore.ordered.projects, // from database
     auth: state.firebase.auth, // from auth

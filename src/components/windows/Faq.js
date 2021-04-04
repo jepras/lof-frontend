@@ -20,8 +20,6 @@ class Faq extends Component {
     this.setState({ loading: false, fields: fields });
   }
   render() {
-    console.log(this.state.fields);
-
     const { question } = this.state.fields;
 
     if (!this.state.loading) {

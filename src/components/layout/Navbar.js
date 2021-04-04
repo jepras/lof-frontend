@@ -1,15 +1,14 @@
-import React from "react";
-import { NavLink, Link } from "react-router-dom";
-import SignedInLinks from "./SignedInLinks";
-import SignedOutLinks from "./SignedOutLinks";
-import { connect } from "react-redux";
+import React from 'react';
+import { NavLink, Link } from 'react-router-dom';
+import SignedInLinks from './SignedInLinks';
+import SignedOutLinks from './SignedOutLinks';
+import { connect } from 'react-redux';
 
-const Navbar = props => {
+const Navbar = (props) => {
   const { auth, profile } = props;
-  // console.log(auth);
 
   const admin =
-    profile.role === "admin" ? (
+    profile.role === 'admin' ? (
       <li>
         <NavLink to="/oversigt">Oversigt</NavLink>
       </li>
@@ -42,11 +41,10 @@ const Navbar = props => {
   );
 };
 
-const mapStateToProps = state => {
-  // console.log(state);
+const mapStateToProps = (state) => {
   return {
     auth: state.firebase.auth,
-    profile: state.firebase.profile
+    profile: state.firebase.profile,
   };
 };
 

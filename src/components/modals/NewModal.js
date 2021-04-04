@@ -4,7 +4,6 @@ import M from 'materialize-css';
 class NewModal extends Component {
   componentDidMount() {
     M.Modal.init(this.Modal);
-    console.log('props from cdm', this.props);
   }
 
   render() {

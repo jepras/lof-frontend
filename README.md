@@ -2,13 +2,15 @@
 
 ## Forklaring
 
+Frontend:
+På **Netlify** ligger hjemmesiden & admin systemet deployet.
+Backend:
 På **Firebase** lagres alle formularer, brugere og de filer de har uploadet.
-Under henholdsvis Firestore, Authentication & Storage.
+Under henholdsvis Firestore, Authentication, Storage & Functions.
 
-På **Strapi** kan teksten på hjemmesiden ændres. Alt bortset fra "Ansøgningsskema".
-
+Content Management System (CMS):
+På **Strapi** kan teksten på hjemmesiden ændres. Alt bortset fra "Ansøgningsskema". Ansøgningsskema teksten ændres direkte i React app'en.
 På **Heroku** ligger Strapi app'en deployet.
-På **Netlify** ligger front end app'en deployet.
 
 ![System Tegning](./src/config/readme/lof-system.png 'Sammenhæng')
 
@@ -26,9 +28,9 @@ På **Netlify** ligger front end app'en deployet.
 Overfør admin rights af Firebase db
 https://console.firebase.google.com/u/0/project/lof-fond/settings/iam
 
-### Backend: Heroku/Strapi
+### CMS: Heroku/Strapi
 
-Fonden skal enten overføre Strapi til egen server fra Heroku eller blive ved med at hoste det på Heroku.
+Fonden skal enten overføre Strapi til egen server fra Heroku eller blive ved med at hoste det på Herozku.
 
 Hvis egen:
 
@@ -58,13 +60,15 @@ npm run start
 
 Når du har en bruger med "role = admin", så kan du se et link til /oversigt i øverste bar på hjemmesiden (til højre for Log af)
 
-## Back end (det bagvedliggende)
+## CMS
 
 ### Start app
 
 yarn develop
 
-### Send Grid
+## Backend
+
+Simpel backend bestående af en Cloud Function der automatisk sender mails ved bekræftelse og afslag gennem SendGrid.
 
 ### Admin system
 

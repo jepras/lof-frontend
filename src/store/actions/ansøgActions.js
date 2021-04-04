@@ -19,8 +19,6 @@ export const send = (info) => {
         dispatch({ type: 'UPDATE_PROFILE_STATUS__ERROR' }, err);
       });
 
-    console.log('FROM ansøgActions - send form initiated WITH: ', profile);
-
     dispatch({ type: 'SEND_FORM_REQUEST' });
     firestore
       .collection('forms')
@@ -44,8 +42,6 @@ export const save = (info) => {
     const firestore = getFirestore();
     const authorId = getState().firebase.auth.uid;
     const stateInfo = getState().firebase;
-
-    console.log('info received: ', info);
 
     /* Get DateTime */
     var today = new Date();
@@ -77,7 +73,6 @@ export const save = (info) => {
         ? parseInt(stateInfo.profile.udgift3, 10)
         : 0);
     var plusudgifter = plusudgifternummer.toString();
-    console.log('plusudgifter', plusudgifter);
 
     var plusindtægternummer =
       (info.formueibank
@@ -121,13 +116,11 @@ export const save = (info) => {
         ? parseInt(stateInfo.profile.familieydelse, 10)
         : 0);
     var plusindtægter = plusindtægternummer.toString();
-    console.log('plusindtægter', plusindtægter);
 
     var totalkrnummer =
       (plusindtægter ? parseInt(plusindtægter, 10) : 0) -
       (plusudgifter ? parseInt(plusudgifter, 10) : 0);
     var totalkr = totalkrnummer.toString();
-    console.log('totalkr', totalkr);
 
     var restnummer = parseInt(plusindtægter, 10) - parseInt(plusudgifter, 10);
     var rest = restnummer.toString();

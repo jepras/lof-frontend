@@ -26,7 +26,7 @@ class ModalConfirm extends Component {
             <a
               data-key="confirm"
               onClick={confirm}
-              className="modal-close waves-effect waves-green btn"
+              className="modal-close waves-effect waves-green green btn"
             >
               Ja
             </a>

@@ -24,12 +24,29 @@ class Oversigt extends Component {
     this.updateState = this.updateState.bind(this);
   }
 
-  sendEmail = () => {
-    const callable = functions.httpsCallable('genericEmail');
-    console.log('callable', callable);
-    return callable({ usermail: 'jeprasher@gmail.com', username: 'bob' }).then(
-      console.log('sucecss!')
-    );
+  sendEmail = (e) => {
+    var data = {
+      mail: this.state.formData.email,
+      receiver: this.state.formData.fornavn,
+    };
+
+    if (e.target.dataset.key === 'confirm') {
+      const callable = functions.httpsCallable('confirmEmail');
+
+      return callable(data)
+        .then(console.log('success from confirmEmail function'))
+        .catch((error) => {
+          console.log('error: ', error);
+        });
+    } else {
+      const callable = functions.httpsCallable('rejectEmail');
+
+      return callable(data)
+        .then(console.log('success from rejectEmail function'))
+        .catch((error) => {
+          console.log('error: ', error);
+        });
+    }
   };
 
   updateState = (e) => {
@@ -50,7 +67,8 @@ class Oversigt extends Component {
   };
 
   makeDecision = (e) => {
-    console.log('e fra makeDecision', e);
+    this.sendEmail(e);
+
     var decisionData = {
       formId: this.state.formId,
       decision: e.target.dataset.key,
@@ -88,7 +106,8 @@ class Oversigt extends Component {
       deleteSuccess,
     } = this.props;
     const { formData } = this.state;
-    console.log('forms: ', forms);
+
+    // eslint-disable-next-line
     var data;
 
     if (forms) {
@@ -117,13 +136,8 @@ class Oversigt extends Component {
     /* For admin usage only */
     if (!profile.role) return <Redirect to="/" />;
 
-    console.log('data', data);
-
     return (
       <div>
-        <button onClick={(e) => this.sendEmail()} className="btn">
-          tryk
-        </button>
         <h3>Nye ansøgniner</h3>
         <table className="highlight">
           <thead>
@@ -331,7 +345,6 @@ class Oversigt extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log('state from mapStateToProps', state);
   return {
     auth: state.firebase.auth,
     profile: state.firebase.profile,

@@ -9,17 +9,13 @@ export const deleteUserData = (data) => {
     const formData = data.formData;
     const formUploads = formData.uploads;
 
-    console.log('dispatching deleteUserData with: ', data);
-
     /* Dispatch redux action */
     dispatch({ type: 'DELETE_ALL_REQUEST' });
 
     /* Delete stored uploads */
     var arrayLength = formUploads.length;
-    console.log('arrayLength: ', arrayLength);
     // eslint-disable-next-line
     for (var i = 0; i < arrayLength; i++) {
-      console.log('name: ', formUploads[i]);
       var filNavn = formUploads[i];
       var filRef = firebase.storage().ref(selectedUserUserId).child(filNavn);
       // eslint-disable-next-line
@@ -93,19 +89,9 @@ export const decide = (info) => {
 
 export const downloadFile = (userData) => {
   return (dispatch, getState, { getFirebase }) => {
-    console.log('userData fra Redux', userData);
-
     const firebase = getFirebase();
     const authorId = userData.selectedUser;
     const filNavn = userData.filNavn;
-    const formData = userData.formData;
-    const formUploads = formData.uploads;
-
-    var arrayLength = formUploads.length;
-    for (var i = 0; i < arrayLength; i++) {
-      console.log('array #', [i]);
-      console.log('name: ', formUploads[i]);
-    }
 
     dispatch({ type: 'DOWNLOAD_FILE_STORAGE_REQUEST' });
 
@@ -118,15 +104,8 @@ export const downloadFile = (userData) => {
       .then(function (url) {
         // This can be downloaded directly:
         var xhr = new XMLHttpRequest();
-        /* xhr.responseType = 'blob';
-        xhr.onload = function (event) {
-          var blob = xhr.response;
-        }; */
         xhr.open('GET', url);
         xhr.send();
-
-        /* url */
-        console.log('url', url);
 
         dispatch({
           type: 'DOWNLOAD_FILE_STORAGE_SUCCESS',

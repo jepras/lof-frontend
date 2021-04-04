@@ -11,7 +11,6 @@ class About extends Component {
   }
 
   async componentDidMount() {
-    console.log('process env', process.env);
     let response = await fetch(process.env.REACT_APP_API_URL + 'omfondens/1');
     if (!response.ok) {
       return;
@@ -24,7 +23,6 @@ class About extends Component {
   render() {
     const { formaal, omfonden, hvordan } = this.state.fields;
 
-    console.log(this.state.fields);
     if (!this.state.loading) {
       return (
         <div>

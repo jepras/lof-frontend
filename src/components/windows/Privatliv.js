@@ -23,8 +23,6 @@ class Privatliv extends Component {
   }
 
   render() {
-    console.log(this.state.fields);
-
     const { undertekst, kontakt, sektion } = this.state.fields;
 
     if (!this.state.loading) {
