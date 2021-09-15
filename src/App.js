@@ -3,6 +3,8 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 
+import Front from './components/windows/Front';
+
 import About from './components/windows/About';
 import Ansøg from './components/windows/Ansøg';
 import Privatliv from './components/windows/Privatliv';
@@ -51,7 +53,8 @@ class App extends Component {
           <Navbar />
           <div className="main container">
             <Switch>
-              <Route exact path="/" component={About} />
+              <Route exact path="/" component={Front} />
+              <Route path="/om" component={About} />
               <Route path="/faq" component={Faq} />
               <Route path="/ansøg" component={Ansøg} />
               <Route path="/privatliv" component={Privatliv} />

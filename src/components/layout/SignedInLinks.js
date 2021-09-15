@@ -1,13 +1,13 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
-import { connect } from "react-redux";
-import { signOut } from "../../store/actions/authActions";
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { signOut } from '../../store/actions/authActions';
 
-const SignedInLinks = props => {
+const SignedInLinks = (props) => {
   return (
     <div>
       <li>
-        <NavLink to="/" className="black-text">
+        <NavLink to="/om" className="black-text">
           Om fonden
         </NavLink>
       </li>
@@ -28,9 +28,9 @@ const SignedInLinks = props => {
   );
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    signOut: () => dispatch(signOut())
+    signOut: () => dispatch(signOut()),
   };
 };
 
