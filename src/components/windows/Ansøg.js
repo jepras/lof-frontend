@@ -252,6 +252,52 @@ class Ansøg extends Component {
                 />
               </div>
             </div>
+            <div className="row">
+              <div className="input-field col s12">
+                <label
+                  htmlFor="banknavn"
+                  className={profile.banknavn ? 'active' : null}
+                >
+                  Banknavn
+                </label>
+                <input
+                  type="text"
+                  id="banknavn"
+                  onChange={this.handleChange}
+                  placeholder={profile.banknavn}
+                />
+              </div>
+            </div>
+            <div className="row">
+              <div className="input-field col s4">
+                <label
+                  htmlFor="registreringsnummer"
+                  className={profile.registreringsnummer ? 'active' : null}
+                >
+                  Registreringsnummer
+                </label>
+                <input
+                  type="text"
+                  id="registreringsnummer"
+                  onChange={this.handleChange}
+                  placeholder={profile.registreringsnummer}
+                />
+              </div>
+              <div className="input-field col s8">
+                <label
+                  htmlFor="kontonummer"
+                  className={profile.kontonummer ? 'active' : null}
+                >
+                  Kontonummer
+                </label>
+                <input
+                  type="text"
+                  id="kontonummer"
+                  onChange={this.handleChange}
+                  placeholder={profile.kontonummer}
+                />
+              </div>
+            </div>
             <div className="input-field col s12">
               <select
                 className="browser-default"
@@ -264,7 +310,7 @@ class Ansøg extends Component {
                 </option>
                 <option value="gift">Gift</option>
                 <option value="ugift">Ugift</option>
-                <option value="samlever">Samlever</option>
+                <option value="samlever">Samlevende</option>
               </select>
             </div>
             <div className="row">
@@ -343,7 +389,7 @@ class Ansøg extends Component {
                   htmlFor="indtægtsamlever"
                   className={profile.indtægtsamlever ? 'active' : null}
                 >
-                  Nettoindtægt for eventuel ægtefælle/samlever
+                  Nettoindtægt for eventuel ægtefælle/samlevende
                 </label>
                 <input
                   type="text"

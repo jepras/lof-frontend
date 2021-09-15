@@ -45,9 +45,22 @@ const FormDataInfoModal = (props) => {
               <b>Email: </b>
               {formData.email}
             </li>
+
             <li className="collection-item">
               <b>Mobil: </b>
               {formData.mobil}
+            </li>
+            <li className="collection-item">
+              <b>Banknavn: </b>
+              {formData.banknavn}
+            </li>
+            <li className="collection-item">
+              <b>Registreringsnummer: </b>
+              {formData.registreringsnummer}
+            </li>
+            <li className="collection-item">
+              <b>Kontonummer: </b>
+              {formData.kontonummer}
             </li>
             <li className="collection-item">
               <b>Civilstand: </b>
@@ -70,7 +83,7 @@ const FormDataInfoModal = (props) => {
               {formData.indtægtansøger}
             </li>
             <li className="collection-item">
-              <b>Indtægt samlever: </b>
+              <b>Indtægt samlevende: </b>
               {formData.indtægtsamlever}
             </li>
             <li className="collection-item">

@@ -22,10 +22,10 @@ const Navbar = (props) => {
 
   return (
     <div>
-      <nav>
+      <nav className="grey lighten-3">
         <div className="nav-wrapper">
           <Link to="/" className="brand-logo">
-            Løfberg & Fennings Fond
+            Løfbergs og Fennings Fond
           </Link>
           <a href="" data-target="mobile-demo" className="sidenav-trigger">
             <i className="material-icons">menu</i>

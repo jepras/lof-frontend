@@ -30,7 +30,7 @@ https://console.firebase.google.com/u/0/project/lof-fond/settings/iam
 
 ### CMS: Heroku/Strapi
 
-Fonden skal enten overføre Strapi til egen server fra Heroku eller blive ved med at hoste det på Herozku.
+Fonden skal enten overføre Strapi til egen server fra Heroku eller blive ved med at hoste det på Heroku.
 
 Hvis egen:
 

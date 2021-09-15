@@ -36,8 +36,6 @@ class Privatliv extends Component {
                 <br />
                 CVR-nr. {kontakt.cvr}
                 <br />
-                c/o advokat {kontakt.advokat}
-                <br />
                 {kontakt.addresse}
                 <br />
                 {kontakt.postnummer}

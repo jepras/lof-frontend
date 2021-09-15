@@ -13,7 +13,9 @@ export const deleteUserData = (data) => {
     dispatch({ type: 'DELETE_ALL_REQUEST' });
 
     /* Delete stored uploads */
-    var arrayLength = formUploads.length;
+    if (formUploads) {
+      var arrayLength = formUploads.length;
+    }
     // eslint-disable-next-line
     for (var i = 0; i < arrayLength; i++) {
       var filNavn = formUploads[i];
