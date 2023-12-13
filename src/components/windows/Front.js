@@ -12,6 +12,12 @@ class About extends Component {
           <div className="col s12">
             <h6 className="center-align">
               Velkommen til Løfbergs og Fennings fonds hjemmeside.
+            <br />
+            <h6 className="center-align">
+              Pr. 4. december 2023:
+              Fonden oplyser, at der til uddelingen ultimo året 2023 har været begrænsede midler, hvilket
+              beklageligvis har medført, at en række legatarer i år ikke er blevet tildelt et legat.
+            </h6>
             </h6>
           </div>
         </div>
